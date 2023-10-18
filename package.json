@@ -1,0 +1,30 @@
+{
+  "name": "greenshiftaddon",
+  "version": "1.0.0",
+  "description": "Greenshift Addon example",
+  "main": "index.js",
+  "devDependencies": {
+    "@wordpress/scripts": "^20.0.1"
+  },
+  "dependencies": {
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.88.2",
+    "@react-three/fiber": "^8.14.5",
+    "@wordpress/block-editor": "^12.11.0",
+    "@wordpress/components": "^25.9.0",
+    "@wordpress/icons": "^9.13.0",
+    "classnames": "^2.3.2",
+    "npm-check-updates": "^16.14.5",
+    "three": "^0.157.0"
+  },
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "check-engines": "wp-scripts check-engines",
+    "packages-update": "wp-scripts packages-update",
+    "lint:js": "wp-scripts lint-js",
+    "lint:style": "wp-scripts lint-style"
+  },
+  "author": "Wpsoul",
+  "license": "ISC"
+}

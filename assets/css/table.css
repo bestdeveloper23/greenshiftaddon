@@ -1,0 +1,55 @@
+.wp-block-greenshift-blocks-advanced-table {
+    margin: 0 0 1em 0;
+}
+.wp-block-greenshift-blocks-advanced-table table {
+    width: 100%;
+    border-collapse: collapse;
+    /*margin-bottom: 30px;*/
+    font-size: 16px;
+}
+.wp-block-greenshift-blocks-advanced-table table.has-fixed-layout {
+    table-layout: fixed;
+}
+.wp-block-greenshift-blocks-advanced-table table,
+.wp-block-greenshift-blocks-advanced-table table tr,
+.wp-block-greenshift-blocks-advanced-table table td,
+.wp-block-greenshift-blocks-advanced-table table th {
+    border: 1px solid;
+}
+.wp-block-greenshift-blocks-advanced-table thead {
+    border-bottom: 3px solid;
+}
+.wp-block-greenshift-blocks-advanced-table tfoot {
+    border-top: 3px solid;
+}
+.wp-block-greenshift-blocks-advanced-table td,
+.wp-block-greenshift-blocks-advanced-table th {
+    word-break: normal;
+    padding: 6px 12px;
+}
+.wp-block-greenshift-blocks-advanced-table figcaption {
+    color: #555;
+    font-size: 13px;
+    text-align: center;
+}
+
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table {
+    border-spacing: 0;
+    border-collapse: inherit;
+    background-color: transparent;
+}
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table tbody tr:nth-child(odd){
+    background-color: #f9fafb;
+}
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table th,
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table td {
+    border-color: transparent;
+}
+
+.wp-block-greenshift-blocks-advanced-table .sort-icon {
+    display: none;
+ }
+
+.wp-block-greenshift-blocks-advanced-table .table-sort .sort-icon {
+    display: block;
+}

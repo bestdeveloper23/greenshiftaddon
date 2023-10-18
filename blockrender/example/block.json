@@ -1,0 +1,9 @@
+{
+	"apiVersion": 1,
+	"name": "greenshift-blocks/exampledev",
+    "title": "Example",
+    "description": "As Example",
+	"category":"greenShiftAddondev",
+	"textdomain": "greenshiftaddon",
+	"editorStyle": "greenShiftAddondev-block-css"
+}

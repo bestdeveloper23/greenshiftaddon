@@ -1,0 +1,123 @@
+.cross-sell-list-section{
+    display: flex;
+    
+}
+.greenshift_woo_row {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.greenshift_woo_row:before {
+    content: " ";
+    display: table
+}
+
+.greenshift_woo_row:after {
+    content: " ";
+    display: table;
+    clear: both
+}
+:after,:before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+.greenshift_woo_col-xs-24 {
+    width: 100%;
+}
+.cross-sell-list-section .combo-title-box {
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px
+}
+
+.cross-sell-list-section .combo-title-box .combo-title-box-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    font-size: 16px
+}
+.cross-sell-list-section .combo-title-box .combo-title-box-price {
+    color: #f10200;
+    font-weight: 700;
+    vertical-align: baseline;
+}
+.cross-sell-list-section .cross-sell-list {
+    border: solid 1px #e0e0e0;
+    padding: 20px 15px 15px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.cross-sell-list-section .combo-offer-image-container {
+    padding: 0 15px;
+    margin-bottom: 34px;
+}
+.cross-sell-list-section .combo-offer-images {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+.cross-sell-list-section .combo-offer-images .combo-offer-image {
+    height: 96px;
+    position: relative;
+}
+a {
+    text-decoration: none;
+}
+img {
+    border: none;
+}
+.cross-sell-list-section .cross-sell-list .icon-plus-wrapper {
+    position: relative;
+    text-align: center;
+    padding: 0 6px;
+    color: #666;
+}
+strong {
+    font-weight: 700;
+}
+.cross-sell-list-section .cross-sell-list .title {
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 60px;
+    margin-bottom: 12px;
+}
+.cross-sell-list-section .cross-sell-list .discount-price-text {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.cross-sell-list-section .cross-sell-list .price {
+    color: #000;
+}
+.cross-sell-list-section .cross-sell-list .add-both-to-cart-button {
+    margin-left: 16.66667%;
+    width: 66.66667%;
+}
+.cross-sell-list-section .cross-sell-list .combo-btn-add-to-cart {
+    background-image: unset;
+    background-color: #FFBF51;
+    max-width: 192px;
+    margin: 8px auto 0 auto;
+    padding: 10PX;
+    border: NONE;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
