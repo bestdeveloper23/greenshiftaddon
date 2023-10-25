@@ -197,6 +197,7 @@ const AnimationMainWrapper = (props) => {
             data-modelanimations= { 
                 (modelanimations.length) ? JSON.stringify(modelanimations) : null 
             }
+            data-target={selected_object ? selected_object: null}
             data-stdelay={(stdelay && Number.isFinite(stdelay)) ? stdelay : null}
             data-from={set_from ? 'yes' : null}
             data-multikeyframes={multikeyframes ? 'yes' : null}

@@ -44,7 +44,7 @@ const Inspector = (props) => {
 			flexAlign,
 			animation_type,
 			td_objects,
-			selected_object
+			selected_object,
 		},
 		setAttributes
 	} = props;
@@ -98,7 +98,7 @@ const Inspector = (props) => {
 									<TreeSelect
 										label="Select object"
 										noOptionLabel="Full model"
-										onChange={(page) => setAttributes({ selected_object: page })}
+										onChange={(value) => setAttributes({ selected_object: value })}
 										tree={td_objects}
 									/>
 								</PanelBody>

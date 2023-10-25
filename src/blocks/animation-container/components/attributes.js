@@ -576,11 +576,11 @@ export default {
     model_url: {
         type: 'string',
     },
-    selected_object: {
-        type: 'string',
-    },
     td_objects: {
         type: 'array',
+    },
+    selected_object: {
+        type: 'string',
     },
     model_animations: {
         type: 'string',

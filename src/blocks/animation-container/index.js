@@ -186,47 +186,43 @@ registerBlockType('greenshift-blocks/animation-container2', {
             setAttributes,
         } = props;
 
-        function GSmodelinit(t, e = !1, a = !1, obj = "", s = "", g = "", i = {}) {
+        function GSmodelinit(t, e = !1, a = !1, s = "", g = "", i = {}) {
             const oldCanvas = AnimationRef.current.querySelector('.animationmodel');
             let o = s || document;
             var r = {};
-            let l;
+            let obj = gs_get_dataset(t, "target");
             if (gs_get_dataset(t, "triggertype"))
                 var d = gs_get_dataset(t, "triggertype");
             else var d = "scroll";
             t.getAttribute("data-prehidden") && t.removeAttribute("data-prehidden");
             var n = {};
-            canvasRef.current._scene.traverse((child) => {
-                console.log("I am here", child, obj)
-                if (child.uuid === obj && child.type === "Mesh") {
-                    l = child;
-                    console.log("I selected: ", l)
-                }
-            });
+            var child = canvasRef.current.findObjectById(obj);
+            console.log("I selected: ", child, canvasRef.current);
             var B = gsap.timeline();
             let O = gs_get_dataset(t, "modelanimations") && JSON.parse(gs_get_dataset(t, "modelanimations")).slice().filter(item => item._objectkey === obj), j = gs_get_dataset(t, "multikeyframes"), L = [];
 
 
             if (O) for (let X = 0; X < O.length; X++) {
-                let Y = O[X].rx ? O[X].rx : l.rotation.x, E = O[X].ry ? O[X].ry : l.rotation.y, T = O[X].rz ? O[X].rz : l.rotation.z,
-                    V = O[X].x ? O[X].x : l.position.x, W = O[X].y ? O[X].y : l.position.y, D = O[X].z ? O[X].z : l.position.z,
-                    I = O[X].sz ? O[X].sz : l.scale.z, R = O[X].sx ? O[X].sx : l.scale.x, H = O[X].sy ? O[X].sy : l.scale.y,
-                    F = O[X].o ? O[X] : l.material.opacity, Q = O[X].delay,
-                    Z = O[X].ease, tt = O[X].duration, te = O[X].time, ta = O[X].from, ti = {};
+                let Y = O[X].rx ? O[X].rx : child.rotation.x, E = O[X].ry ? O[X].ry : child.rotation.y, T = O[X].rz ? O[X].rz : child.rotation.z,
+                    V = O[X].x ? O[X].x : child.position.x, W = O[X].y ? O[X].y : child.position.y, D = O[X].z ? O[X].z : child.position.z,
+                    I = O[X].sz ? O[X].sz : child.scale.z, R = O[X].sx ? O[X].sx : child.scale.x, H = O[X].sy ? O[X].sy : child.scale.y,
+                    F = O[X].o ? O[X] : null, Q = O[X].delay,
+                    Z = O[X].ease, tt = O[X].duration? O[X].duration : 1, te = O[X].time, ta = O[X].from, tg = O[X].obj, ti = {};
 
-                let modified_material = l.material;
-                modified_material.opacity = (parseFloat(F) / 100);
+                // let modified_material = child.material;
+                // modified_material.opacity = (parseFloat(F) / 100);
 
-                // ti.rotation = { x: parseFloat(Y), y: parseFloat(E), z: parseFloat(T) };
-                // ti.position = { x: parseFloat(V), y: parseFloat(W), z: parseFloat(D) };
-                // ti.scale = { x: parseFloat(R), y: parseFloat(H), z: parseFloat(I) };
-                ti.material = modified_material;
+                ti.rotation = { x: parseFloat(Y), y: parseFloat(E), z: parseFloat(T) };
+                ti.position = { x: parseFloat(V), y: parseFloat(W), z: parseFloat(D) };
+                ti.scale = { x: parseFloat(R), y: parseFloat(H), z: parseFloat(I) };
+                // ti.material = modified_material;
                 ti.delay = Q;
                 ti.duration = tt;
                 ti.customtime = te;
+                ti.customobj = tg;
                 ti.from = ta;
                 // if ((Y || 0 == Y) && (ti.rotation = parseFloat(Y)), (E || 0 == E) && (ti.rotation.y = parseFloat(E)), (T || 0 == T) && (ti.rotation = parseFloat(T)), (V || 0 == V) && (ti.position.x = parseFloat(V)), (W || 0 == W) && (ti.position.y = parseFloat(W)), (D || 0 == D) && (ti.position.z = parseFloat(D)), (z || 0 == z), I && (ti.scale.x = parseFloat(I)), R && (ti.scale.y = parseFloat(R)), H && (ti.scale.z = parseFloat(H)), (F || 0 === F) && (ti.autoAlpha = parseInt(F) / 100), Q && (ti.delay = parseFloat(Q)), (U || 0 == U) && (ti.width = U), (N || 0 == N) && (ti.height = N), K && (ti.transformOrigin = K), tt && "yes" != j && (ti.duration = parseFloat(tt)), te && "yes" != j ? ti.customtime = te : te || "yes" == j || (ti.customtime = ">"), ta && "yes" != j && (ti.from = ta), tg && "yes" != j && (ti.customobj = tg), Z) {
-                if (ti.rotation, ti.position, ti.scale, ti.delay, ti.duration, ti.opacity, Z) {
+                if (ti.rotation, ti.position, ti.scale, ti.delay, ti.duration, Z) {
                     if ("none" == Z) ti.ease = "none";
                     else if ("power1-out" == Z && "yes" == j);
                     else if (Z) {
@@ -238,12 +234,18 @@ registerBlockType('greenshift-blocks/animation-container2', {
 
                 L.push(ti)
             }
-            if ("yes" == j && L.length > 0 && (n.keyframes = L), "yes" == gs_get_dataset(t, "from") ? B.from(l, n) : B.to(l, n), gs_get_dataset(t, "delay") && B.delay(parseFloat(gs_get_dataset(t, "delay"))), "yes" == gs_get_dataset(t, "loop") && ("yes" == gs_get_dataset(t, "yoyo") && B.yoyo(!0), B.repeat(-1), gs_get_dataset(t, "delay") && "yes" == gs_get_dataset(t, "repeatdelay") && B.repeatDelay(parseFloat(gs_get_dataset(t, "delay")))), "yes" != j && L.length > 0)
+            if ("yes" == j && L.length > 0 && (n.keyframes = L), "yes" == gs_get_dataset(t, "from") ? B.from(child, n) : B.to(child, n), gs_get_dataset(t, "delay") && B.delay(parseFloat(gs_get_dataset(t, "delay"))), "yes" == gs_get_dataset(t, "loop") && ("yes" == gs_get_dataset(t, "yoyo") && B.yoyo(!0), B.repeat(-1), gs_get_dataset(t, "delay") && "yes" == gs_get_dataset(t, "repeatdelay") && B.repeatDelay(parseFloat(gs_get_dataset(t, "delay")))), "yes" != j && L.length > 0)
                 for (let tl = 0; tl < L.length; tl++) {
                     L[tl].customobj && (0 == L[tl].customobj.indexOf(".") || 0 == L[tl].customobj.indexOf("#") ? (0 == L[tl].customobj.indexOf(".") && (l = o.querySelectorAll(L[tl].customobj)), 0 == L[tl].customobj.indexOf("#") && (l = o.querySelector(L[tl].customobj))) : l = o.querySelectorAll("." + L[tl].customobj));
                     let { from: td, customtime: tn, ...tc } = L[tl];
-                    (L[tl].z || L[tl].rx || L[tl].ry) && gsap.set(l, { transformPerspective: 1e3 }),
-                        "yes" == L[tl].from ? B.from(l, tc, L[tl].customtime) : B.to(l, tc, L[tl].customtime)
+                    let values = L[tl];
+                    // (L[tl].z || L[tl].rx || L[tl].ry) && gsap.set(child, { transformPerspective: 1e3 }),
+                    "yes" == L[tl].from ? (B.from(child.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).from(child.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").from(child.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
+                        // B.from(child.material, { opacity: values.material.opacity, delay: values.delay, duration: values.duration }, values.customtime)) :
+                    ) :
+                        (B.to(child.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).to(child.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").to(child.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
+                            // B.to(child.material, { opacity: values.material.opacity, delay: values.delay, duration: values.duration }, values.customtime))
+                        )
                 }
             let tu = "";
             if (tu = t.getAttribute("data-customtrigger") ? 0 == t.getAttribute("data-customtrigger").indexOf("#") || 0 == t.getAttribute("data-customtrigger").indexOf(".") ? o.querySelector(t.getAttribute("data-customtrigger")) : "window" == t.getAttribute("data-customtrigger") ? window : t.querySelector(t.getAttribute("data-customtrigger")) : t, "load" == d || e) B.play();
@@ -259,7 +261,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
             else {
                 gsapscrolledfind = !0, r.trigger = tu;
                 let tL = void 0 !== i.conditions && i.conditions.isMobile, tX = "yes" == gs_get_dataset(t, "useMobile"), tY = tX && tL ? gs_get_dataset(t, "triggerstartM") : gs_get_dataset(t, "triggerstart"), tE = tX && tL ? gs_get_dataset(t, "triggerendM") : gs_get_dataset(t, "triggerend");
-                if (tY ? r.start = isNaN(tY) ? tY : parseInt(tY) : "yes" == gs_get_dataset(t, "scrollcontainer") ? r.start = "left 92%" : r.start = "clamp(top 92%)", tE && (r.end = isNaN(tE) ? tE : parseInt(tE)), gs_get_dataset(t, "triggerscrub") && (r.scrub = parseFloat(gs_get_dataset(t, "triggerscrub"))), gs_get_dataset(t, "triggersnap") && (r.snap = parseFloat(gs_get_dataset(t, "triggersnap"))), gs_get_dataset(t, "pinned") && (r.pin = !0, gs_get_dataset(t, "pinreparent") && (r.pinReparent = !0), gs_get_dataset(t, "anticipatepin") && (r.anticipatePin = !0), gs_get_dataset(t, "pinspace") && (r.pinSpacing = !1), "yes" == gs_get_dataset(t, "pinfade") && (B.from(l, { autoAlpha: 0, duration: .2 }, 0), B.to(l, { autoAlpha: 0, duration: .2 }, .8))), gs_get_dataset(t, "triggeraction") ? r.toggleActions = gs_get_dataset(t, "triggeraction") : r.toggleActions = "play pause resume reverse", r.animation = B, "yes" == gs_get_dataset(t, "videoplay") && (r.onToggle = t => t.isActive ? GSPBplayVideo(l) : GSPBplayVideo(l, "pause")), r.fastScrollEnd = !0, a) gs_get_dataset(t, "pinpreview") && (r.pinType = "fixed"), r.scroller = "boolean" == typeof a ? ".interface-interface-skeleton__content" : a;
+                if (tY ? r.start = isNaN(tY) ? tY : parseInt(tY) : "yes" == gs_get_dataset(t, "scrollcontainer") ? r.start = "left 92%" : r.start = "clamp(top 92%)", tE && (r.end = isNaN(tE) ? tE : parseInt(tE)), gs_get_dataset(t, "triggerscrub") && (r.scrub = parseFloat(gs_get_dataset(t, "triggerscrub"))), gs_get_dataset(t, "triggersnap") && (r.snap = parseFloat(gs_get_dataset(t, "triggersnap"))), gs_get_dataset(t, "pinned") && (r.pin = !0, gs_get_dataset(t, "pinreparent") && (r.pinReparent = !0), gs_get_dataset(t, "anticipatepin") && (r.anticipatePin = !0), gs_get_dataset(t, "pinspace") && (r.pinSpacing = !1), "yes" == gs_get_dataset(t, "pinfade") && (B.from(child, { autoAlpha: 0, duration: .2 }, 0), B.to(child, { autoAlpha: 0, duration: .2 }, .8))), gs_get_dataset(t, "triggeraction") ? r.toggleActions = gs_get_dataset(t, "triggeraction") : r.toggleActions = "play pause resume reverse", r.animation = B, r.fastScrollEnd = !0, a) gs_get_dataset(t, "pinpreview") && (r.pinType = "fixed"), r.scroller = "boolean" == typeof a ? ".interface-interface-skeleton__content" : a;
                 else if ("yes" == gs_get_dataset(t, "scrollcontainer")) {
                     let tT = t.closest(".gs-gsap-scrollx");
                     if (tT) {
@@ -271,6 +273,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     }
                 } "yes" == gs_get_dataset(t, "scrollernav") && (r.scroller = t.closest(".gspb_pagenav")), gs_get_dataset(t, "scroller") && (r.scroller = gs_get_dataset(t, "scroller")), g && (r.id = "gsinit" + g), ScrollTrigger.create(r)
             }
+
         }
 
 
@@ -292,6 +295,16 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     if (ctx) ctx.revert();
                     ctx = gsap.context(() => {
                         if (gsapquick) {
+                            
+                            if (gsapquick && canvasRef.current && model_animations) {
+                                if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                                    gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
+                                    GSmodelinit(gsapquick, false, true, ownerDocument, id);
+                                } else {
+                                    gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
+                                    GSmodelinit(gsapquick, true, false, ownerDocument, id);
+                                }
+                            }
                             let stgsap = ScrollTrigger.getById('gsinit' + id);
                             if (stgsap) stgsap.kill();
                             gsap.killTweensOf(gsapquick);
@@ -312,8 +325,10 @@ registerBlockType('greenshift-blocks/animation-container2', {
                             if (streveal) streveal.kill();
                             gsap.killTweensOf(revealobj);
                             if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                                gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
                                 GSrevealinit(revealtransform, false, true, id);
                             } else {
+                                gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
                                 GSrevealinit(revealtransform, true, true, id);
                             }
 
@@ -339,18 +354,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
             []
         );
         useEffect(() => {
-            if (AnimationRef.current) {
-                const gsapquick = AnimationRef.current.querySelector('.gs-gsap-wrap');
-                let ownerDocument = AnimationRef.current.ownerDocument;
-
-                if (gsapquick && canvasRef.current && model_animations) {
-                    if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                        GSmodelinit(gsapquick, false, true, selected_object, ownerDocument, id);
-                    } else {
-                        GSmodelinit(gsapquick, true, false, selected_object, ownerDocument, id);
-                    }
-                }
-            }
+            
             if (isInitialMount.current) {
                 isInitialMount.current = false;
 
@@ -358,6 +362,14 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     const gsapquick = AnimationRef.current.querySelector('.gs-gsap-wrap');
                     let ownerDocument = AnimationRef.current.ownerDocument;
 
+                    
+                    if (gsapquick && canvasRef.current && model_animations) {
+                        if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                            GSmodelinit(gsapquick, false, true, ownerDocument, id);
+                        } else {
+                            GSmodelinit(gsapquick, true, false, ownerDocument, id);
+                        }
+                    }
                     if (gsapquick) {
                         if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
                             GSinit(gsapquick, false, true, ownerDocument, id);
@@ -472,7 +484,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
             varheight, videoplay, easecustom, maxX,
             reveal_clip,
             reveal_ease,
-            model_animations]
+            model_animations,
+            selected_object]
         );
 
 
@@ -481,11 +494,10 @@ registerBlockType('greenshift-blocks/animation-container2', {
             (() => {
                 const oldCanvas = AnimationRef.current.querySelector('.animationmodel');
 
-                console.log("MODEL URL", model_url, model_animations)
                 if (oldCanvas && oldCanvas.getAttribute("url")) {
                     let test_objects = [];
                     const model_url2 = oldCanvas.getAttribute("url");
-                    console.log("second call", model_url2)
+
                     if (oldCanvas.children.length > 0) {
                         const gl = oldCanvas.children[0].getContext('webgl2');
 
@@ -500,10 +512,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     canvasRef.current = app;
 
                     app.load(model_url2).then(() => {
-                        console.log(app);
                         getobjects(app._scene);
                         setAttributes({ td_objects: test_objects });
-                        console.log(td_objects)
                         app._scene.traverse((child) => {
                         })
                     });
