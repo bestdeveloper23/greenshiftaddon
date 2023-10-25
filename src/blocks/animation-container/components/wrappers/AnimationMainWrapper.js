@@ -107,7 +107,10 @@ const AnimationMainWrapper = (props) => {
             easecustom,
             maxX,
             scrollernav,
-            model_url
+            model_url,
+            td_objects,
+            selected_object,
+            model_animations
         },
         children,
     } = props;
@@ -123,6 +126,7 @@ const AnimationMainWrapper = (props) => {
 
     // remove unesessary values
     const final_multi_origin = multiple_animation ? JSON.parse(multiple_animation) : [];
+    const modelanimations = model_animations ? JSON.parse(model_animations) : [];
     let batchtrigger = '';
     if(animation_type == 'batch'){
         batchtrigger = "batch";
@@ -188,7 +192,10 @@ const AnimationMainWrapper = (props) => {
             data-batchrandom={(animation_type === 'batch' && batchrandom) ? batchrandom : null}
             data-batchonce={(animation_type === 'batch' && batchonce) ? batchonce : null}
             data-multianimations={
-                final_multi_origin.length ? JSON.stringify(final_multi_origin) : null
+                (final_multi_origin.length) ? JSON.stringify(final_multi_origin) : null
+            }
+            data-modelanimations= { 
+                (modelanimations.length) ? JSON.stringify(modelanimations) : null 
             }
             data-stdelay={(stdelay && Number.isFinite(stdelay)) ? stdelay : null}
             data-from={set_from ? 'yes' : null}
@@ -236,10 +243,10 @@ const AnimationMainWrapper = (props) => {
             data-scrollcontainer={scrollcontainer ? 'yes' : null}
             data-scrollernav={scrollernav ? 'yes' : null}
         >
-            {model_url && (
+            {(model_url && animation_type === "3d_model") ? (
                 <ModelBox editor={true} {...props} />
-            )}
-            {children}
+            ) :
+            children}
         </div>
     );
 };

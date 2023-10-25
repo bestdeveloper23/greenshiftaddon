@@ -8,12 +8,10 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { useEffect, useRef } from '@wordpress/element';
-import { Canvas } from '@react-three/fiber';
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three'
+// import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// import * as THREE from 'three'
+import { Application } from '@splinetool/runtime';
 
 // Import blpge dependencies
 const {
@@ -70,19 +68,20 @@ const ModelBox = (props) => {
 			csstransform,
 			animation,
 			position,
-			td_objects
+			td_objects,
+			multiple_animation
 		},
-		setAttributes,
+		// setAttributes,
 		className,
 		clientId
 	} = props;
-	const ModelRef = useRef();
 	// const scene = new THREE.Scene();
 	// const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }) // turn on antialias
 	// const gltfloader = new GLTFLoader();
 
 	// var container;
 
+	const ModelRef1 = useRef(null);
 	let modelBoxId = `gspb_modelBox-id-${id}`;
 
 	// for styles applied by the user
@@ -194,30 +193,30 @@ const ModelBox = (props) => {
 	);
 
 	// useEffect(() => {
-	const scene = new THREE.Scene();
-	var container;
-	scene.background = new THREE.Color(0x000000)
-	scene.background = null;
-	const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }) // turn on antialias
-	renderer.setClearColor(0x000000, 0);
-	// renderer.outputEncoding = THREE.sRGBEncoding // set color encoding
-	// container.appendChild(renderer.domElement) // add the renderer to html div
+	// const scene = new THREE.Scene();
+	// var container;
+	// scene.background = new THREE.Color(0x000000)
+	// scene.background = null;
+	// const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }) // turn on antialias
+	// renderer.setClearColor(0x000000, 0);
+	// // renderer.outputEncoding = THREE.sRGBEncoding // set color encoding
+	// // container.appendChild(renderer.domElement) // add the renderer to html div
 
 
-	/////////////////////////////////////////////////////////////////////////
-	///// CAMERAS CONFIG
-	const camera = new THREE.PerspectiveCamera(45, 1, 0.001, 100);
-	camera.position.set(1.5, 1.5, 1.5);
-	camera.lookAt(0, 0, 0);
-	camera.updateMatrix();
-	const ambient = new THREE.AmbientLight(0xffffff, 1)
-	scene.add(ambient)
+	// /////////////////////////////////////////////////////////////////////////
+	// ///// CAMERAS CONFIG
+	// const camera = new THREE.PerspectiveCamera(45, 1, 0.001, 100);
+	// camera.position.set(1.5, 1.5, 1.5);
+	// camera.lookAt(0, 0, 0);
+	// camera.updateMatrix();
+	// const ambient = new THREE.AmbientLight(0xffffff, 1)
+	// scene.add(ambient)
 
-	const sunLight = new THREE.PointLight(0xffffff, 0.8)
-	sunLight.position.set(20, 20, 30)
-	scene.add(sunLight)
-	scene.add(camera);
-	const controls = new OrbitControls(camera, renderer.domElement);
+	// const sunLight = new THREE.PointLight(0xffffff, 0.8)
+	// sunLight.position.set(20, 20, 30)
+	// scene.add(sunLight)
+	// scene.add(camera);
+	// const controls = new OrbitControls(camera, renderer.domElement);
 
 	// },[])
 	useEffect(() => {
@@ -227,123 +226,169 @@ const ModelBox = (props) => {
 
 		if (!td_url) return;
 
-		container = ModelRef.current.querySelector('.canvascontainer2');
-		renderer.setSize(container.clientWidth, container.clientHeight); // make it full screen
-		renderer.setPixelRatio(container.clientWidth / container.clientHeight) //set pixel ratio
-		camera.aspect = container.clientWidth / container.clientHeight;
-		camera.updateProjectionMatrix();
-		container.appendChild(renderer.domElement);
-		const loader = new GLTFLoader();
+		const oldCanvas = ModelRef1.current.querySelector(`#gs_spline_${id}`);
 
-// treeselect contructor----------------------------------------------//
-		function getobjects(parent, childrens = []) {
+		// const oldCanvas = document.getElementById('myCanvas');
 
-			if (parent.children.length == 0 && parent.isMesh) {
-				childrens.push({ id: parent.uuid, name: parent.name });
+		// Create a new canvas element
+		const newCanvas = document.createElement('canvas');
+		
+
+		// Transfer the necessary properties from the old canvas to the new canvas
+		newCanvas.width = oldCanvas.width;
+		newCanvas.height = oldCanvas.height;
+		newCanvas.style.cssText = oldCanvas.style.cssText;
+
+		// Replace the old canvas with the new canvas
+		oldCanvas.parentNode.replaceChild(newCanvas, oldCanvas);
+		// oldCanvas.remove()
+		newCanvas.id = `gs_spline_${id}`;
+		// Get the WebGL context
+		const contextWebGL = newCanvas.getContext('webgl2');
+		// const canvas = ModelRef1.current.querySelector('');
+		const app = new Application(newCanvas);
+		console.log(oldCanvas.parentNode)
+
+		app.load(td_url).then(() => {
+			console.log(app);
+			getobjects(app._scene);
+			// setAttributes({td_objects: test_objects})
+			// app._scene.traverse((child)=>{
+			// 	console.log("Traverse",  child)
+			// })
+			// app.setBackgroundColor("#000000");
+		});
+		// container = ModelRef1.current.querySelector('.canvascontainer2');
+		// container = ModelRef1.current.querySelector('.canvascontainer2');
+		// const url = container.getAttribute('src');
+		// console.log(url, "URL", container)
+		// renderer.setSize(container.clientWidth, container.clientHeight); // make it full screen
+		// renderer.setPixelRatio(container.clientWidth / container.clientHeight) //set pixel ratio
+		// camera.aspect = container.clientWidth / container.clientHeight;
+		// camera.updateProjectionMatrix();
+		// container.appendChild(renderer.domElement);
+		// const loader = new GLTFLoader();
+
+		// // treeselect contructor----------------------------------------------//
+		function getobjects(object) {
+
+			if (object.children.length === 0) {
+				// childrens.push({ id: object.uuid, name: object.name });
+				return ({id: object.uuid, name: object.name});
 				// test_objects.push(childrens)
-				return undefined;
-			} else if (parent.children.length == 1) {
-				getobjects(parent.children[0])
-			} else if (parent.children.length > 1) {
-				parent.children.map((child) => {
-					if (child.children.length == 0 && child.isMesh) {
-						// if(getobjects(child)){
-						// childrens.push(getobjects(child));
-						test_objects.push({id: child.uuid, name: child.name, children: getobjects(child) });
-						getobjects(child)
-					} else if (child.children.length >= 1) {
-						getobjects(child)
-					}
+				// return undefined;
+			}  else if (object.children.length === 1) {
+				return getobjects(object.children[0])
+			} else if (object.children.length > 1) {
+				const childrens = [];
+				object.children.map((child) => {
+					// if (child.children.length === 0 && child.isMesh) {
+					// 	// if(getobjects(child)){
+					// 	// childrens.push(getobjects(child));
+					// 	test_objects.push({id: child.uuid, name: child.name, children: getobjects(child) });
+					// 	getobjects(child)
+					// } else if (child.children.length >= 1) {
+					// 	getobjects(child)
 					// }
+					// // }
+					// if(child.children.length === 0){
+					// 	// childrens.push({ id: child.uuid, name: child.name})
+					// } else {
+						const childrens2 = [];
+						let children;
+						children = getobjects(child);
+						childrens2.push(children);
+						childrens.push({ id:child.uuid, name: child.name, children: childrens2});
+					// }
+					
 				});
-
-			} else {
-				return null;
+				test_objects[0] = ({id: object.uuid, name: object.name, children: childrens})
+				return ({id: object.uuid, name: object.name, children: childrens});
+			
 			}
-			// }
-		}
-
-// treeselect contructor----------------------------------------------//
-
-// Resize_response----------------------------------------------//
-		window.addEventListener('resize', () => {
-			renderer.setSize(container.clientWidth, container.clientHeight); // make it full screen
-			renderer.setPixelRatio(container.clientWidth / container.clientHeight) //set pixel ratio
-			camera.aspect = container.clientWidth / container.clientHeight;
-			camera.updateProjectionMatrix()
-		})
-
-// Resize_response----------------------------------------------//
-
-		loader.load(
-			td_url,
-			(gltf) => {
-				// Do something with the loaded model
-				getobjects(gltf.scene);
-
-				setAttributes({ td_objects: test_objects });
-				var max = 0;
-
-				var max_x_pos = 0;
-				var min_x_pos = 0;
-				var max_y_pos = 0;
-				var min_y_pos = 0;
-				var max_z_pos = 0;
-				var min_z_pos = 0;
-				var model = gltf.scene;
-				scene.remove(scene.children[3])
-				scene.add(model);
-				console.log(scene);
-				// model.traverse(
-				// 	(child) => {
-				// 		if ((child).isMesh) {
-				// 			var point_count = child.geometry.attributes.position.count * 3;
-
-				// 			for (let i = 0; i < point_count; i++) {
-
-				// 				if (i % 3 == 0) {
-				// 					if (max_x_pos < child.geometry.attributes.position.array[i]) max_x_pos = child.geometry.attributes.position.array[i];
-				// 					if (min_x_pos > child.geometry.attributes.position.array[i]) min_x_pos = child.geometry.attributes.position.array[i];
-
-				// 				}
-				// 				if (i % 3 == 1) {
-				// 					if (max_y_pos < child.geometry.attributes.position.array[i]) max_y_pos = child.geometry.attributes.position.array[i];
-				// 					if (min_y_pos > child.geometry.attributes.position.array[i]) min_y_pos = child.geometry.attributes.position.array[i];
-				// 				}
-				// 				if (i % 3 == 2) {
-				// 					if (max_z_pos < child.geometry.attributes.position.array[i]) max_z_pos = child.geometry.attributes.position.array[i];
-				// 					if (min_z_pos > child.geometry.attributes.position.array[i]) min_z_pos = child.geometry.attributes.position.array[i];
-				// 				}
-				// 			}
-				// 		}
-				// 	}
-				// )
-				// max = Math.max(max_x_pos - min_x_pos, max_y_pos - min_y_pos, max_z_pos - min_z_pos);
-				// model.scale.set(1 / max, 1 / max, 1 / max);
-				// model.position.set((max_x_pos + min_x_pos) / 2 / max * (-1), (max_y_pos + min_y_pos) / 2 / max * (-1), (max_z_pos + min_z_pos) / 2 / max * (-1));
-
-				// scene.add(model);
-				// console.log(model)
-
-			},
-			(progress) => {
-				// Progress callback
-				console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`);
-			},
-			(error) => {
-				// Error callback
-				console.error('An error occurred while loading the GLTF file:', error);
-			}
-		);
-		function rendeLoop() {
-
-			renderer.render(scene, camera)
-			controls.update();
-			requestAnimationFrame(rendeLoop) //loop the render function    
 
 		}
+		// // treeselect contructor----------------------------------------------//
 
-		rendeLoop() //start rendering
+		// // Resize_response----------------------------------------------//
+		// window.addEventListener('resize', () => {
+		// 	renderer.setSize(container.clientWidth, container.clientHeight); // make it full screen
+		// 	renderer.setPixelRatio(container.clientWidth / container.clientHeight) //set pixel ratio
+		// 	camera.aspect = container.clientWidth / container.clientHeight;
+		// 	camera.updateProjectionMatrix()
+		// })
+
+		// // Resize_response----------------------------------------------//
+
+		// loader.load(
+		// 	url,
+		// 	(gltf) => {
+		// 		// Do something with the loaded model
+		// 		getobjects(gltf.scene);
+
+		// 		setAttributes({ td_objects: test_objects });
+		// 		var max = 0;
+
+		// 		var max_x_pos = 0;
+		// 		var min_x_pos = 0;
+		// 		var max_y_pos = 0;
+		// 		var min_y_pos = 0;
+		// 		var max_z_pos = 0;
+		// 		var min_z_pos = 0;
+		// 		var model = gltf.scene;
+		// 		scene.remove(scene.children[3])
+		// 		scene.add(model);
+		// 		console.log(scene);
+		// 		// model.traverse(
+		// 		// 	(child) => {
+		// 		// 		if ((child).isMesh) {
+		// 		// 			var point_count = child.geometry.attributes.position.count * 3;
+
+		// 		// 			for (let i = 0; i < point_count; i++) {
+
+		// 		// 				if (i % 3 == 0) {
+		// 		// 					if (max_x_pos < child.geometry.attributes.position.array[i]) max_x_pos = child.geometry.attributes.position.array[i];
+		// 		// 					if (min_x_pos > child.geometry.attributes.position.array[i]) min_x_pos = child.geometry.attributes.position.array[i];
+
+		// 		// 				}
+		// 		// 				if (i % 3 == 1) {
+		// 		// 					if (max_y_pos < child.geometry.attributes.position.array[i]) max_y_pos = child.geometry.attributes.position.array[i];
+		// 		// 					if (min_y_pos > child.geometry.attributes.position.array[i]) min_y_pos = child.geometry.attributes.position.array[i];
+		// 		// 				}
+		// 		// 				if (i % 3 == 2) {
+		// 		// 					if (max_z_pos < child.geometry.attributes.position.array[i]) max_z_pos = child.geometry.attributes.position.array[i];
+		// 		// 					if (min_z_pos > child.geometry.attributes.position.array[i]) min_z_pos = child.geometry.attributes.position.array[i];
+		// 		// 				}
+		// 		// 			}
+		// 		// 		}
+		// 		// 	}
+		// 		// )
+		// 		// max = Math.max(max_x_pos - min_x_pos, max_y_pos - min_y_pos, max_z_pos - min_z_pos);
+		// 		// model.scale.set(1 / max, 1 / max, 1 / max);
+		// 		// model.position.set((max_x_pos + min_x_pos) / 2 / max * (-1), (max_y_pos + min_y_pos) / 2 / max * (-1), (max_z_pos + min_z_pos) / 2 / max * (-1));
+
+		// 		// scene.add(model);
+		// 		// console.log(model)
+
+		// 	},
+		// 	(progress) => {
+		// 		// Progress callback
+		// 		console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`);
+		// 	},
+		// 	(error) => {
+		// 		// Error callback
+		// 		console.error('An error occurred while loading the GLTF file:', error);
+		// 	}
+		// );
+		// function rendeLoop() {
+
+		// 	renderer.render(scene, camera)
+		// 	controls.update();
+		// 	requestAnimationFrame(rendeLoop) //loop the render function    
+
+		// }
+
+		// rendeLoop() //start rendering
 
 	}, [td_url])
 
@@ -353,9 +398,17 @@ const ModelBox = (props) => {
 				{...blockProps}
 				style={{ display: 'flex' }}
 				{...AnimationProps}
-				ref={ModelRef}
+				ref={ModelRef1}
 			>
-				<div class='canvascontainer2' style={{ width: "100%", height: "250px" }} />
+				  {/* <canvas id="canvas3d" class="block w-full h-full relative z-10"></canvas> */}
+				<canvas
+					class='canvascontainer2'
+					id={`gs_spline_${id}`}
+					src={td_url ? td_url : null}
+					mousemove={td_mmove ? td_mmove : 0}
+					zoom={td_zoom_disable ? td_zoom_disable : null}
+					style={{ width: "100%", height: "250px" }}
+				/>
 				{/* <Canvas>
 					<ambientLight />
 					<pointLight position={[10, 10, 10]} />

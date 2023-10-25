@@ -457,7 +457,7 @@ const CommonForm = (props) => {
     return (
         <div className="gs-inspector-form-inspector">
             <div>{__('Select type', 'greenshiftgsap')}</div>
-            <StylesforBlock columns={3} value={animation_type} onChange={val => setAttributes({ animation_type: val })}
+            <StylesforBlock columns={3} value={animation_type} onChange={(val) => {setAttributes({ animation_type: val })}}
                 options={[
                     { value: 'regular', svg: rtransform, label: __('Transform', 'greenshiftgsap') },
                     { value: 'stagger_transformations', svg: staggertransform, label: __('Stagger', 'greenshiftgsap') },

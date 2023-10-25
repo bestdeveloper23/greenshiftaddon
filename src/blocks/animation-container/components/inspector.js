@@ -43,12 +43,12 @@ const Inspector = (props) => {
 			variable4value,
 			flexAlign,
 			animation_type,
-			td_objects
+			td_objects,
+			selected_object
 		},
 		setAttributes
 	} = props;
 
-	console.log({ ...props }, "SDFASDFSDFSDF")
 	let csstransformchange = isEqual(attributesDefault.csstransform.default, props.attributes.csstransform) ? false : true;
 	let positionchange = isEqual(attributesDefault.position.default, props.attributes.position) ? false : true;
 	let responsivechange = isEqual(attributesDefault.responsive.default, props.attributes.responsive) ? false : true;
@@ -98,7 +98,7 @@ const Inspector = (props) => {
 									<TreeSelect
 										label="Select object"
 										noOptionLabel="Full model"
-										onChange={(page) => console.log(page)}
+										onChange={(page) => setAttributes({ selected_object: page })}
 										tree={td_objects}
 									/>
 								</PanelBody>

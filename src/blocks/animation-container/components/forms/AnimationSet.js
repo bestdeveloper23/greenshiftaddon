@@ -6,25 +6,27 @@ const { BlpgeColorPicker, RadioAdvanced } = gspblib.components;
 
 const AnimationSet = ({ id, props }) => {
     const {
-        attributes: { multiple_animation, multikeyframes },
+        attributes: { animation_type, multiple_animation, multikeyframes, model_animations },
         setAttributes,
     } = props;
 
-    const animationTarget = multiple_animation
+    const animationTarget = (multiple_animation && animation_type !== "3d_model")
         ? JSON.parse(multiple_animation).find((item) => item._id === id)
-        : null;
-    const currentAnimations = JSON.parse(multiple_animation).slice();
+        : (model_animations && animation_type === "3d_model")
+            ? JSON.parse(model_animations).find((item) => item._id === id)
+            : null;
+    const currentAnimations = (animation_type !== "3d_model") ? JSON.parse(multiple_animation).slice() : JSON.parse(model_animations).slice();
 
     const updateAnimationSetOption = (field, value) => {
         if (value !== null) {
             currentAnimations.find((v) => v._id === id)[field] = value;
-            setAttributes({ multiple_animation: JSON.stringify(currentAnimations) });
+            (animation_type === "3d_model") ? setAttributes({ model_animations: JSON.stringify(currentAnimations) }) : setAttributes({ multiple_animation: JSON.stringify(currentAnimations) });
         }
     };
 
     const resetAnimationOption = (field) => {
         delete currentAnimations.find((v) => v._id === id)[field];
-        setAttributes({ multiple_animation: JSON.stringify(currentAnimations) });
+        (animation_type === "3d_model") ? setAttributes({ model_animations: JSON.stringify(currentAnimations) }) : setAttributes({ multiple_animation: JSON.stringify(currentAnimations) });
     }
 
     return (
@@ -74,135 +76,226 @@ const AnimationSet = ({ id, props }) => {
                 <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("r", parseInt(value))}
-                                label={__('Rotation')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={animationTarget.r}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("rx", parseInt(value))}
+                                    label={__('Rotation X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.rx}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("r", parseInt(value))}
+                                    label={__('Rotation')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.r}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("rx", parseInt(value))}
-                                label={__('X')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={animationTarget.rx}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("ry", parseInt(value))}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.ry}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("rx", parseInt(value))}
+                                    label={__('X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.rx}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("ry", parseInt(value))}
-                                label={__('Y')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={animationTarget.ry}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("rz", parseInt(value))}
+                                    label={__('Z')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.rz}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("ry", parseInt(value))}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={animationTarget.ry}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                 </div>
                 <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("s", parseFloat(value))}
-                                label={__('Scale')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={30}
-                                step={0.1}
-                                value={animationTarget.s}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("sx", parseFloat(value))}
+                                    label={__('Scale X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.sx}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("s", parseFloat(value))}
+                                    label={__('Scale')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.s}
+                                />
+
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("sx", parseFloat(value))}
-                                label={__('X')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={30}
-                                step={0.1}
-                                value={animationTarget.sx}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("sy", parseFloat(value))}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.sy}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("sx", parseFloat(value))}
+                                    label={__('X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.sx}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => updateAnimationSetOption("sy", parseFloat(value))}
-                                label={__('Y')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={30}
-                                step={0.1}
-                                value={animationTarget.sy}
-                            />
+                            {animation_type === "3d_model" ?
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("sz", parseFloat(value))}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.sz}
+                                />
+                                :
+                                <NumberControl
+                                    onChange={(value) => updateAnimationSetOption("sy", parseFloat(value))}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={30}
+                                    step={0.1}
+                                    value={animationTarget.sy}
+                                />
+
+                            }
                         </BaseControl>
                     </div>
                 </div>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => updateAnimationSetOption("xo", parseInt(value))}
-                        label={__('Translate X (%)')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={animationTarget.xo}
-                    />
-                </BaseControl>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => updateAnimationSetOption("yo", parseInt(value))}
-                        label={__('Translate Y (%)')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={animationTarget.yo}
-                    />
-                </BaseControl>
-                <div className="gspb_row gspb_row--gutter-20">
-                    <div className="gspb_row__col--8" style={{ padding: 0 }}>
-                        {__("Width")}
-                    </div>
-                    <div className="gspb_row__col--4" style={{ padding: 0 }}>
-                        <TextControl
-                            value={animationTarget.width}
-                            onChange={(value) => updateAnimationSetOption("width", value)}
-                        />
-                    </div>
-                </div>
-                <div className="gspb_row gspb_row--gutter-20">
-                    <div className="gspb_row__col--8" style={{ padding: 0 }}>
-                        {__("Height")}
-                    </div>
-                    <div className="gspb_row__col--4" style={{ padding: 0 }}>
-                        <TextControl
-                            value={animationTarget.height}
-                            onChange={(value) => updateAnimationSetOption("height", value)}
-                        />
-                    </div>
-                </div>
+                {animation_type !== "3d_model" &&
+                    <>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => updateAnimationSetOption("xo", parseInt(value))}
+                                label={__('Translate X (%)')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={animationTarget.xo}
+                            />
+                        </BaseControl>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => updateAnimationSetOption("yo", parseInt(value))}
+                                label={__('Translate Y (%)')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={animationTarget.yo}
+                            />
+                        </BaseControl>
+                        <div className="gspb_row gspb_row--gutter-20">
+                            <div className="gspb_row__col--8" style={{ padding: 0 }}>
+                                {__("Width")}
+                            </div>
+                            <div className="gspb_row__col--4" style={{ padding: 0 }}>
+                                <TextControl
+                                    value={animationTarget.width}
+                                    onChange={(value) => updateAnimationSetOption("width", value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="gspb_row gspb_row--gutter-20">
+                            <div className="gspb_row__col--8" style={{ padding: 0 }}>
+                                {__("Height")}
+                            </div>
+                            <div className="gspb_row__col--4" style={{ padding: 0 }}>
+                                <TextControl
+                                    value={animationTarget.height}
+                                    onChange={(value) => updateAnimationSetOption("height", value)}
+                                />
+                            </div>
+                        </div>
+                    </>
+                }
+
+
                 <BaseControl className="gs-label-row">
                     <NumberControl
                         onChange={(value) => updateAnimationSetOption("o", parseInt(value))}
@@ -276,51 +369,56 @@ const AnimationSet = ({ id, props }) => {
                             onChange={(value) => updateAnimationSetOption("additive", value == true ? "yes" : "no")} />
                     </div>
                 </div>
-                <hr style={{ marginBottom: 15, marginTop: 15 }} />
-                <div className="gspb_row gspb_row--gutter-30">
-                    <div className="gspb_row__col--6">
-                        <span className="gspb_inspector_property-title">
-                            {__("Background Color")}
-                        </span>
-                    </div>
-                    <div className="gspb_row__col--6" style={{ textAlign: "right", justifyContent: "flex-end", padding: 0 }}>
-                        <BlpgeColorPicker
-                            color={animationTarget.bg}
-                            onChange={(value) => updateAnimationSetOption("bg", value.rgb ? `rgba(${value.rgb.r}, ${value.rgb.g}, ${value.rgb.b}, ${value.rgb.a})` : value)}
-                        />
-                    </div>
-                </div>
+                {animation_type !== "3d_model" &&
+                    <>
+                        <hr style={{ marginBottom: 15, marginTop: 15 }} />
+                        <div className="gspb_row gspb_row--gutter-30">
+                            <div className="gspb_row__col--6">
+                                <span className="gspb_inspector_property-title">
+                                    {__("Background Color")}
+                                </span>
+                            </div>
+                            <div className="gspb_row__col--6" style={{ textAlign: "right", justifyContent: "flex-end", padding: 0 }}>
+                                <BlpgeColorPicker
+                                    color={animationTarget.bg}
+                                    onChange={(value) => updateAnimationSetOption("bg", value.rgb ? `rgba(${value.rgb.r}, ${value.rgb.g}, ${value.rgb.b}, ${value.rgb.a})` : value)}
+                                />
+                            </div>
+                        </div>
 
-                <hr style={{ marginBottom: 15, marginTop: 15 }} />
-                <div className="gspb_row gspb_row--gutter-30">
-                    <div class="gspb_row__col--6" style={{ padding: "0 10px 0 0" }}>
-                        {animationTarget.custom_origin ?
-                            <TextControl
-                                value={animationTarget.origin}
-                                onChange={(value) => updateAnimationSetOption("origin", value)}
-                                help={<OriginDocLink />}
-                            />
-                            :
-                            <AlignmentMatrixControl
-                                help={<OriginDocLink />}
-                                label={__("Origin")}
-                                value={animationTarget.origin}
-                                onChange={(value) => updateAnimationSetOption("origin", value)}
-                            />
-                        }
-                    </div>
-                    <div class="gspb_row__col--6" style={{ padding: 0 }}>
-                        <span style={{ display: "block" }} className="marginbottom10">
-                            {__("Use custom transform origin")}
-                        </span>
-                        <ToggleControl
-                            className="marginbottom10"
-                            checked={animationTarget.custom_origin}
-                            onChange={(value) => updateAnimationSetOption("custom_origin", value)}
-                        />
+                        <hr style={{ marginBottom: 15, marginTop: 15 }} />
+                        <div className="gspb_row gspb_row--gutter-30">
+                            <div class="gspb_row__col--6" style={{ padding: "0 10px 0 0" }}>
+                                {animationTarget.custom_origin ?
+                                    <TextControl
+                                        value={animationTarget.origin}
+                                        onChange={(value) => updateAnimationSetOption("origin", value)}
+                                        help={<OriginDocLink />}
+                                    />
+                                    :
+                                    <AlignmentMatrixControl
+                                        help={<OriginDocLink />}
+                                        label={__("Origin")}
+                                        value={animationTarget.origin}
+                                        onChange={(value) => updateAnimationSetOption("origin", value)}
+                                    />
+                                }
+                            </div>
+                            <div class="gspb_row__col--6" style={{ padding: 0 }}>
+                                <span style={{ display: "block" }} className="marginbottom10">
+                                    {__("Use custom transform origin")}
+                                </span>
+                                <ToggleControl
+                                    className="marginbottom10"
+                                    checked={animationTarget.custom_origin}
+                                    onChange={(value) => updateAnimationSetOption("custom_origin", value)}
+                                />
 
-                    </div>
-                </div>
+                            </div>
+                        </div>
+
+                    </>
+                }
 
                 <>
                     <hr style={{ marginBottom: 15, marginTop: 15 }} />

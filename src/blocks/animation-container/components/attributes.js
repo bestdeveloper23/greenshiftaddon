@@ -2,21 +2,21 @@
  * Set the block attributes
  * @type {Object}
  */
- const { collectionsObjects } = gspblib.helpers;
+const { collectionsObjects } = gspblib.helpers;
 
 export default {
 
-	id: {
-		type: 'string',
-		default: null,
-	},
-	inlineCssStyles: {
-		type: 'string',
-	},
+    id: {
+        type: 'string',
+        default: null,
+    },
+    inlineCssStyles: {
+        type: 'string',
+    },
     flexbox: {
-		type: 'object',
-		default: collectionsObjects.flexbox,
-	},
+        type: 'object',
+        default: collectionsObjects.flexbox,
+    },
     dynamicGClass: {
         type: "string",
     },
@@ -109,9 +109,9 @@ export default {
         type: 'string',
     },
     blockWidth: {
-		type: 'object',
-		default: collectionsObjects.blockWidth
-	},
+        type: 'object',
+        default: collectionsObjects.blockWidth
+    },
 
     origin: {
         type: 'string',
@@ -174,7 +174,7 @@ export default {
     },
 
     // break type for text
-    text: { 
+    text: {
         type: 'string',
         default: null
     },
@@ -188,12 +188,12 @@ export default {
         default: null
     },
 
-    triggertype : {
+    triggertype: {
         type: 'string',
         default: 'scroll'
     },
 
-	// Css ID of custom trigger or custom class for Batch scroll.
+    // Css ID of custom trigger or custom class for Batch scroll.
     customtrigger: {
         type: 'string',
         default: null
@@ -329,7 +329,7 @@ export default {
         type: 'string',
         default: 'lr'
     },
-    
+
     reveal_speed: {
         type: 'number',
         default: 1
@@ -408,29 +408,29 @@ export default {
         type: 'boolean',
     },
     responsive: {
-		type: 'object',
-		default: collectionsObjects.responsive
-	},
+        type: 'object',
+        default: collectionsObjects.responsive
+    },
     spacing: {
-		type: 'object',
-		default: collectionsObjects.spacing,
-	},
+        type: 'object',
+        default: collectionsObjects.spacing,
+    },
     position: {
-		type: 'object',
-		default: collectionsObjects.position,
-	},
-	csstransform: {
-		type: 'object',
-		default: collectionsObjects.csstransform,
-	},
-	backgroundBlock: {
-		type: 'object',
-		default: collectionsObjects.background,
-	},
-	backgroundReveal: {
-		type: 'object',
-		default: collectionsObjects.background,
-	},
+        type: 'object',
+        default: collectionsObjects.position,
+    },
+    csstransform: {
+        type: 'object',
+        default: collectionsObjects.csstransform,
+    },
+    backgroundBlock: {
+        type: 'object',
+        default: collectionsObjects.background,
+    },
+    backgroundReveal: {
+        type: 'object',
+        default: collectionsObjects.background,
+    },
     prehide: {
         type: 'boolean',
     },
@@ -567,10 +567,23 @@ export default {
     scrollernav: {
         type: 'boolean',
     },
-    easecustom:{
+    easecustom: {
         type: 'string',
     },
-    maxX:{
+    maxX: {
         type: 'string',
+    },
+    model_url: {
+        type: 'string',
+    },
+    selected_object: {
+        type: 'string',
+    },
+    td_objects: {
+        type: 'array',
+    },
+    model_animations: {
+        type: 'string',
+        default: '[]',
     }
 }

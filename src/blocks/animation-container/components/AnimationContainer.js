@@ -46,7 +46,10 @@ export const AnimationContainer = (props) => {
             batchchild,
             reveal_clip,
             reveal_dir,
-            flexbox
+            flexbox,
+			model_url,
+			selected_object,
+            td_objects,
         },
         isChange,
         clientId,

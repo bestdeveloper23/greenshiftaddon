@@ -69,13 +69,26 @@ require_once GREENSHIFTADDONDEV_DIR_PATH . 'blockrender/example/block.php';
 //////////////////////////////////////////////////////////////////
 
 // Hook: Frontend assets.
-add_action('wp_enqueue_scripts', 'greenShiftAddondev_register_init');
+add_action('enqueue_block_editor_assets', 'greenShiftAddondev_register_init');
+// add_action('init', 'gspb_greenShiftAddondev_register_scripts_blocks');
 
+
+// if (!function_exists('gspb_greenShiftAddondev_register_scripts_blocks')){
+// 	function gspb_greenShiftAddondev_register_scripts_blocks(){
+// 		wp_enqueue_script(
+// 			'gspbaddondevscript',
+// 			GREENSHIFTADDONDEV_DIR_URL . 'libs/spline3danimation/runtime.js',
+// 				array(),
+// 				'0.9.485',
+// 				true,
+// 		);
+// 	};
+// }
 if (!function_exists('greenShiftAddondev_register_init')) {
 	function greenShiftAddondev_register_init()
 	{
 
-		wp_register_script(
+		wp_enqueue_script(
 			'gspbaddondevscript',
 			GREENSHIFTADDONDEV_DIR_URL . 'libs/example/index.js',
 			array(),
@@ -83,35 +96,34 @@ if (!function_exists('greenShiftAddondev_register_init')) {
 			true
 		);
 
-		wp_register_style(
+		wp_enqueue_style(
 			'gspbaddondevstyle',
 			GREENSHIFTADDONDEV_DIR_URL . 'libs/example/index.css',
 			array(),
 			'1.1',
 		);
 
+		// wp_register_script(
+		// 	'advancedtable',
+		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table.js',
+		// 	array(),
+		// 	'1.0',
+		// 	true
+		// );
+		// wp_register_style(
+		// 	'advancedtable',
+		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/css/table.css',
+		// 	array(),
+		// 	'1.0',
+		// );
 
-		wp_register_script(
-			'advancedtable',
-			GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table.js',
-			array(),
-			'1.0',
-			true
-		);
-		wp_register_style(
-			'advancedtable',
-			GREENSHIFTADDONDEV_DIR_URL . 'assets/css/table.css',
-			array(),
-			'1.0',
-		);
-
-		wp_register_script(
-			'advancedtable-sort',
-			GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table-sort.js',
-			array(),
-			'1.2',
-			true
-		);
+		// wp_register_script(
+		// 	'advancedtable-sort',
+		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table-sort.js',
+		// 	array(),
+		// 	'1.2',
+		// 	true
+		// );
 	}
 }
 
@@ -136,8 +148,6 @@ if (!function_exists('greenShiftAddondev_editor_assets')) {
 			rand(1, 9999),
 			true
 		);
-
-
 		// Styles.
 		wp_enqueue_style(
 			'greenShiftAddondev-block-css',
@@ -175,9 +185,10 @@ if (!function_exists('greenShiftAddondev_block_script_assets')) {
 
 		if (!is_admin()) {
 
-			if ($block['blockName'] == 'greenshift-blocks/exampledev') {
+			if ($block['blockName'] == 'greenshift-blocks/animation-container2') {
 				wp_enqueue_script('gspbaddondevscript');
 				wp_enqueue_style('gspbaddondevstyle');
+				wp_enqueue_script('gs-3danimation');
 			}
 
 			if ($block['blockName'] == 'greenshift-blocks/advanced-table') {

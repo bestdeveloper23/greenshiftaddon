@@ -1,0 +1,81 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/advanced-table/styles.editor.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+.wp-block-greenshift-blocks-advanced-table {
+  margin: 0 0 1em 0;
+}
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table {
+  border-spacing: 0;
+  border-collapse: inherit;
+  background-color: transparent;
+}
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table tbody tr:nth-child(odd) {
+  background-color: #f9fafb;
+}
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table th,
+.wp-block-greenshift-blocks-advanced-table.is-style-stripes table td {
+  border-color: transparent;
+}
+.wp-block-greenshift-blocks-advanced-table table, .wp-block-greenshift-blocks-advanced-table tr, .wp-block-greenshift-blocks-advanced-table td, .wp-block-greenshift-blocks-advanced-table th {
+  border: 1px solid;
+}
+.wp-block-greenshift-blocks-advanced-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.wp-block-greenshift-blocks-advanced-table table.has-fixed-layout {
+  table-layout: fixed;
+}
+.wp-block-greenshift-blocks-advanced-table thead {
+  border-bottom: 3px solid;
+}
+.wp-block-greenshift-blocks-advanced-table tfoot {
+  border-top: 3px solid;
+}
+.wp-block-greenshift-blocks-advanced-table td,
+.wp-block-greenshift-blocks-advanced-table th {
+  word-break: normal;
+  padding: 6px 12px;
+}
+.wp-block-greenshift-blocks-advanced-table figcaption {
+  color: #555;
+  font-size: 13px;
+  text-align: center;
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/tablethead/styles.editor.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
+
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/tabletbody/styles.editor.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
+
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/tablerow/styles.editor.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+
+/*!****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/tablecell/styles.editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************/
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/animation-container/editor.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************/
+.block-editor-block-list__block .gs-animation .block-list-appender {
+  margin: 0;
+}
+
+.marginbottom10 {
+  margin-bottom: 10px !important;
+}
+
+.gs-gsap-wrap {
+  perspective: 500px;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/blocks/modelviewer/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+
+
+/*# sourceMappingURL=index.css.map*/
