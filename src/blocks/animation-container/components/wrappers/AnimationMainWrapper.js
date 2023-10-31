@@ -67,13 +67,13 @@ const AnimationMainWrapper = (props) => {
             batchchild,
             prehide,
             variable1,
-			variable2,
-			variable3,
-			variable4,
-			variable1value,
-			variable2value,
-			variable3value,
-			variable4value,
+            variable2,
+            variable3,
+            variable4,
+            variable1value,
+            variable2value,
+            variable3value,
+            variable4value,
             xM,
             yM,
             zM,
@@ -128,7 +128,7 @@ const AnimationMainWrapper = (props) => {
     const final_multi_origin = multiple_animation ? JSON.parse(multiple_animation) : [];
     const modelanimations = model_animations ? JSON.parse(model_animations) : [];
     let batchtrigger = '';
-    if(animation_type == 'batch'){
+    if (animation_type == 'batch') {
         batchtrigger = "batch";
     }
 
@@ -152,7 +152,7 @@ const AnimationMainWrapper = (props) => {
             data-width={width ? width : null}
             data-height={height ? height : null}
             data-boxshadow={final_shadow !== '' ? final_shadow : null}
-            data-o={(o || o===0) ? o : null}
+            data-o={(o || o === 0) ? o : null}
             data-bg={background ? background : null}
             data-origin={origin ? origin : null}
             data-ease={ease ? ease : null}
@@ -194,14 +194,14 @@ const AnimationMainWrapper = (props) => {
             data-multianimations={
                 (final_multi_origin.length) ? JSON.stringify(final_multi_origin) : null
             }
-            data-modelanimations= { 
-                (modelanimations.length) ? JSON.stringify(modelanimations) : null 
+            data-modelanimations={
+                (modelanimations.length) ? JSON.stringify(modelanimations) : null
             }
-            data-target={selected_object ? selected_object: null}
+            data-target={selected_object ? selected_object : null}
             data-stdelay={(stdelay && Number.isFinite(stdelay)) ? stdelay : null}
             data-from={set_from ? 'yes' : null}
             data-multikeyframes={multikeyframes ? 'yes' : null}
-            data-prehidden={((((o==1 || o===0) && set_from && animation_type !=='svg_motion_path') || prehide) && !props.editor) ? 1 : null}
+            data-prehidden={((((o == 1 || o === 0) && set_from && animation_type !== 'svg_motion_path') || prehide) && !props.editor) ? 1 : null}
             data-variable1={variable1 || null}
             data-variable2={variable2 || null}
             data-variable3={variable3 || null}
@@ -223,7 +223,7 @@ const AnimationMainWrapper = (props) => {
             data-syM={(syM && Number.isFinite(syM)) ? syM : null}
             data-skewXM={(skewXM && Number.isFinite(skewXM)) ? skewXM : null}
             data-skewYM={(skewYM && Number.isFinite(skewYM)) ? skewYM : null}
-            data-oM={(oM || oM===0) ? oM : null}
+            data-oM={(oM || oM === 0) ? oM : null}
             data-usemobile={useMobile ? 'yes' : null}
             data-triggerstartM={triggerstartM || null}
             data-triggerendM={triggerendM || null}
@@ -243,11 +243,22 @@ const AnimationMainWrapper = (props) => {
             data-videoplay={videoplay ? 'yes' : null}
             data-scrollcontainer={scrollcontainer ? 'yes' : null}
             data-scrollernav={scrollernav ? 'yes' : null}
+            url = {model_url}
         >
-            {(model_url && animation_type === "3d_model") ? (
-                <ModelBox editor={true} {...props} />
-            ) :
-            children}
+            {/* {(model_url && animation_type === "3d_model") ? ( */}
+            
+            {/* <div
+                // editor={true}
+                // {...props}
+                style={{ display: 'flex' }}
+                class='animationmodel'
+                id={`gs_spline_${id}`}
+                url={model_url}
+            >
+            </div> */}
+            {/* // ) : */}
+            {children}
+            <canvas />
         </div>
     );
 };

@@ -16,4 +16,4 @@ import './blocks/tabletbody';
 import './blocks/tablerow';
 import './blocks/tablecell';
 import './blocks/animation-container';
-import './blocks/modelviewer';
+// import './blocks/modelviewer';

@@ -19,6 +19,7 @@ import attributes from './components/attributes';
 import AnimationContainer from './components/AnimationContainer';
 import Inspector from './components/inspector';
 import { Application } from '@splinetool/runtime';
+import { useBlockProps } from '@wordpress/block-editor';
 
 // Import gspb depenedencies
 const { gspb_setBlockId } = gspblib.utilities;
@@ -80,6 +81,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
 
     edit(props) {
 
+        const blockProps = useBlockProps();
         // Set Unique Block ID
         useEffect(() => {
             gspb_setBlockId(props);
@@ -186,23 +188,45 @@ registerBlockType('greenshift-blocks/animation-container2', {
             setAttributes,
         } = props;
 
-        function GSmodelinit(t, e = !1, a = !1, s = "", g = "", i = {}) {
-            const oldCanvas = AnimationRef.current.querySelector('.animationmodel');
+        useEffect(() => {
+
+            document.addEventListener("DOMContentLoaded", function (t) {
+                gsap.matchMedia().add(
+                    { isDesktop: "(min-width: 768px)", isMobile: "(max-width: 767px)" },
+                    t => {
+                        let e = document.getElementsByClassName("gs-gsap-wrap");
+                        if (e.length > 0) {
+                            for (let a = 0; a < e.length; a++)GSmodelinit(e[a], !1, !1, "Scene", "", "", t);
+                            gsapscrolledfind && document.addEventListener("lazyloaded", function (t) { ScrollTrigger.refresh() })
+                        }
+                        let s = document.querySelectorAll("[data-gsapinit]");
+                        if (s.length > 0)
+                            for (let g = 0; g < s.length; g++)
+                                GSmodelinit(s[g], !1, !1, "Scene", "", "", t)
+                    });
+            });
+        }, [])
+
+        function GSmodelinit(t, e = !1, a = !1, obj = "Scene", s = "", g = "", i = {}) {
             let o = s || document;
             var r = {};
-            let obj = gs_get_dataset(t, "target");
             if (gs_get_dataset(t, "triggertype"))
                 var d = gs_get_dataset(t, "triggertype");
             else var d = "scroll";
             t.getAttribute("data-prehidden") && t.removeAttribute("data-prehidden");
             var n = {};
-            var child = canvasRef.current.findObjectById(obj);
-            console.log("I selected: ", child, canvasRef.current);
             canvasRef.current._scene.traverse((children) => {
                 if (children.type !== 'HemisphereLight') {
                     gsap.killTweensOf(canvasRef.current.findObjectById(children.uuid));
                 }
+                if(children.name === "Scene" && obj === "Scene"){
+                    obj = children.uuid;
+                }
             })
+            
+            var child = canvasRef.current.findObjectById(obj);
+            console.log("I selected: ", child, canvasRef.current);
+
             if (child && child.name === "Scene") {
                 canvasRef.current._scene.traverse((children) => {
                     if (children.type !== "HemisphereLight") {
@@ -391,12 +415,12 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                     if (canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")).type !== "HemisphereLight") {
                                         gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
                                     }
-                                    GSmodelinit(gsapquick, false, true, ownerDocument, id);
+                                    GSmodelinit(gsapquick, false, true, gs_get_dataset(gsapquick, "target"), ownerDocument, id);
                                 } else {
                                     if (canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")).type !== "HemisphereLight") {
                                         gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
                                     }
-                                    GSmodelinit(gsapquick, true, false, ownerDocument, id);
+                                    GSmodelinit(gsapquick, true, false, gs_get_dataset(gsapquick, "target"), ownerDocument, id);
                                 }
                             }
                             let stgsap = ScrollTrigger.getById('gsinit' + id);
@@ -586,23 +610,24 @@ registerBlockType('greenshift-blocks/animation-container2', {
         useEffect(() => {
 
             (() => {
-                const oldCanvas = AnimationRef.current.querySelector('.animationmodel');
+                const oldCanvas = AnimationRef.current.querySelector('.gs-gsap-wrap');
 
                 if (oldCanvas && oldCanvas.getAttribute("url")) {
                     let test_objects = [];
                     const model_url2 = oldCanvas.getAttribute("url");
 
-                    if (oldCanvas.children.length > 0) {
-                        const gl = oldCanvas.children[0].getContext('webgl2');
-
-                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                    if (oldCanvas.children.length > 1) {
+                        oldCanvas.children[1].remove();
+                        const newCanvas = document.createElement('canvas');
+                        const contextWebGL = newCanvas.getContext('webgl2');
+                        oldCanvas.appendChild(newCanvas);
                     } else {
                         const newCanvas = document.createElement('canvas');
                         const contextWebGL = newCanvas.getContext('webgl2');
                         oldCanvas.appendChild(newCanvas);
                     }
 
-                    const app = new Application(oldCanvas.children[0]);
+                    const app = new Application(oldCanvas.children[1]);
                     canvasRef.current = app;
 
                     app.load(model_url2).then(() => {
@@ -654,7 +679,17 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 <Inspector animationref={AnimationRef.current} {...props} />
                 <BlockToolBar {...props} />
                 <div className="gs-animation" ref={AnimationRef}>
-                    <AnimationContainer editor={true} {...props}>
+                    {/* <div
+                        // editor={true}
+                        // {...props}
+                        style={{ display: 'flex' }}
+                        class='animationmodel'
+                        id={`gs_spline_${id}`}
+                        url={model_url}
+                    >
+                    </div> */}
+                    <AnimationContainer editor={true} {...props} {...blockProps}>
+
                         <InnerBlocks
                             renderAppender={() => hasChildBlocks ? <InnerBlocks.DefaultBlockAppender /> : <InnerBlocks.ButtonBlockAppender />}
                         />
@@ -665,10 +700,24 @@ registerBlockType('greenshift-blocks/animation-container2', {
     },
 
     save(props) {
+        // const blockProps = useBlockProps.save();
         return (
-            <AnimationContainer editor={false} {...props}>
-                <InnerBlocks.Content />
-            </AnimationContainer>
+            <>
+                {/* <div
+                    // editor={true}
+                    // {...props}
+                    style={{ display: 'flex' }}
+                    class='animationmodel'
+                    id={`gs_spline_${attributes.id}`}
+                    url={attributes.model_url}
+                >
+                </div> */}
+                <AnimationContainer editor={false} {...props}>
+
+                    <InnerBlocks.Content />
+                </AnimationContainer>
+            </>
+
         );
     },
 });
