@@ -9,7 +9,7 @@ import AnimationForm from './forms/AnimationForm';
 import CommonForm from './forms/CommonForm';
 import MultipleAnimation from './forms/MultipleAnimation';
 
-import { isEqual } from 'lodash';
+import isEqual from "lodash/isEqual";
 import attributesDefault from './attributes';
 
 const { InspectorControls, BlockControls, AlignmentToolbar } = wp.blockEditor;
@@ -44,7 +44,6 @@ const Inspector = (props) => {
 			flexAlign,
 			animation_type,
 			td_objects,
-			selected_object,
 		},
 		setAttributes
 	} = props;

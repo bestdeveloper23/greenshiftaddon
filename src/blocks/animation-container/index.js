@@ -18,7 +18,8 @@ import { planeicon } from './components/icons.js'
 import attributes from './components/attributes';
 import AnimationContainer from './components/AnimationContainer';
 import Inspector from './components/inspector';
-import { Application } from '@splinetool/runtime';
+import { Application } from '../../../libs/splinetool/runtime.js';
+
 import { useBlockProps } from '@wordpress/block-editor';
 
 // Import gspb depenedencies
@@ -182,7 +183,6 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 reveal_ease,
                 model_url,
                 selected_object,
-                td_objects,
                 model_animations
             },
             setAttributes,
@@ -225,7 +225,6 @@ registerBlockType('greenshift-blocks/animation-container2', {
             })
             
             var child = canvasRef.current.findObjectById(obj);
-            console.log("I selected: ", child, canvasRef.current);
 
             if (child && child.name === "Scene") {
                 canvasRef.current._scene.traverse((children) => {
@@ -234,7 +233,6 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         let model = canvasRef.current.findObjectById(children.uuid);
                         let O = gs_get_dataset(t, "modelanimations") && JSON.parse(gs_get_dataset(t, "modelanimations")).slice().filter(item => item._objectkey === model.uuid), j = gs_get_dataset(t, "multikeyframes"), L = [];
                         if (O && O.length) {
-                            console.log("Traverse : ", O, model)
                             if (O) for (let X = 0; X < O.length; X++) {
                                 let Y = O[X].rx ? O[X].rx : model.rotation.x, E = O[X].ry ? O[X].ry : model.rotation.y, T = O[X].rz ? O[X].rz : model.rotation.z,
                                     V = O[X].x ? O[X].x : model.position.x, W = O[X].y ? O[X].y : model.position.y, D = O[X].z ? O[X].z : model.position.z,

@@ -22,7 +22,6 @@ export const AnimationContainer = (props) => {
     const {
         attributes: {
             id,
-            inlineCssStyles,
             scroll_parallax_enabled,
             mouse_move_enabled,
             reveal_enabled,
@@ -47,11 +46,7 @@ export const AnimationContainer = (props) => {
             reveal_clip,
             reveal_dir,
             flexbox,
-			model_url,
-			selected_object,
-            td_objects,
         },
-        isChange,
         clientId,
         className
     } = props;

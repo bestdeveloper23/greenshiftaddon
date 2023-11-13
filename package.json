@@ -7,14 +7,12 @@
     "@wordpress/scripts": "^20.0.1"
   },
   "dependencies": {
-    "@splinetool/loader": "^0.9.486",
-    "@splinetool/runtime": "0.9.485",
+    "@splinetool/runtime": "^0.9.494",
     "@wordpress/block-editor": "^12.11.0",
     "@wordpress/components": "^25.9.0",
     "@wordpress/icons": "^9.13.0",
     "classnames": "^2.3.2",
-    "npm-check-updates": "^16.14.5",
-    "three": "^0.157.0"
+    "npm-check-updates": "^16.14.5"
   },
   "scripts": {
     "start": "wp-scripts start",

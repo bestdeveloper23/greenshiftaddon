@@ -69,24 +69,44 @@ require_once GREENSHIFTADDONDEV_DIR_PATH . 'blockrender/example/block.php';
 //////////////////////////////////////////////////////////////////
 
 // Hook: Frontend assets.
-add_action('enqueue_block_editor_assets', 'greenShiftAddondev_register_init');
-// add_action('init', 'gspb_greenShiftAddondev_register_scripts_blocks');
 
+add_action('init', 'greenShiftAddondev_register_init');
 
-// if (!function_exists('gspb_greenShiftAddondev_register_scripts_blocks')){
-// 	function gspb_greenShiftAddondev_register_scripts_blocks(){
-// 		wp_enqueue_script(
-// 			'gspbaddondevscript',
-// 			GREENSHIFTADDONDEV_DIR_URL . 'libs/spline3danimation/runtime.js',
-// 				array(),
-// 				'0.9.485',
-// 				true,
-// 		);
-// 	};
-// }
 if (!function_exists('greenShiftAddondev_register_init')) {
 	function greenShiftAddondev_register_init()
 	{
+
+		wp_enqueue_script(
+			'gspbaddondev-gsap',
+			GREENSHIFTGSAP_DIR_URL . 'libs/gsap/gsap.min.js',
+			array(),
+			'3.12.2',
+			true
+		);
+
+		wp_enqueue_script(
+			'gsap-scrolltrigger',
+			GREENSHIFTGSAP_DIR_URL . 'libs/gsap/ScrollTrigger.min.js',
+			array('gsap-animation'),
+			'3.12.2',
+			true
+		);
+
+		wp_enqueue_script(
+			'gspbaddondev-init',
+			GREENSHIFTADDONDEV_DIR_URL . 'libs/gsap/gsap-init3.js',
+			array(),
+			'1.1',
+			true,
+		);
+
+		add_filter('script_loader_tag', 'add_type_to_script', 10, 3);
+		function add_type_to_script($tag, $handle, $source) {
+						if ('gspbaddondev-init' === $handle) {
+										$tag = '<script src="' . $source . '" type="module" ></script>';
+						}
+						return $tag;
+		}
 
 		wp_enqueue_script(
 			'gspbaddondevscript',
@@ -103,7 +123,8 @@ if (!function_exists('greenShiftAddondev_register_init')) {
 			'1.1',
 		);
 
-		// wp_register_script(
+	
+		// wp_enqueue_script(
 		// 	'advancedtable',
 		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table.js',
 		// 	array(),
@@ -188,7 +209,8 @@ if (!function_exists('greenShiftAddondev_block_script_assets')) {
 			if ($block['blockName'] == 'greenshift-blocks/animation-container2') {
 				wp_enqueue_script('gspbaddondevscript');
 				wp_enqueue_style('gspbaddondevstyle');
-				wp_enqueue_script('gs-3danimation');
+				// wp_enqueue_script('gspbaddondev-3d');
+				// wp_enqueue_script('gspbaddondev-init');
 			}
 
 			if ($block['blockName'] == 'greenshift-blocks/advanced-table') {

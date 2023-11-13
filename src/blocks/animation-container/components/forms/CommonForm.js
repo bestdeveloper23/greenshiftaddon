@@ -474,7 +474,7 @@ const CommonForm = (props) => {
                 <>
                     <PanelBody
                         initialOpen={true}
-                        title={__('GLTF Model loader')}
+                        title={__('Spline model loader')}
                     >
                         <div className={`${props.attributes.loading ? " gspb_loader_line_label" : ""}`}>
                             <TextControl
@@ -495,7 +495,7 @@ const CommonForm = (props) => {
                                 allowedTypes={['glb', 'gltf']}
                                 value={model_url}
                                 render={({ open }) => (
-                                    <Button isSecondary onClick={open}>{__("Upload Gltf or Glb file")}</Button>
+                                    <Button isSecondary onClick={open}>{__("Upload spline file")}</Button>
                                 )}
                             />
                         </MediaUploadCheck>
