@@ -9,7 +9,7 @@
  * Webpack is compiling as the input file.
  */
 
-// import './blocks/example';
+import './blocks/example';
 import './blocks/advanced-table';
 import './blocks/tablethead';
 import './blocks/tabletbody';

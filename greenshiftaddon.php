@@ -124,27 +124,27 @@ if (!function_exists('greenShiftAddondev_register_init')) {
 		);
 
 	
-		// wp_enqueue_script(
-		// 	'advancedtable',
-		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table.js',
-		// 	array(),
-		// 	'1.0',
-		// 	true
-		// );
-		// wp_register_style(
-		// 	'advancedtable',
-		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/css/table.css',
-		// 	array(),
-		// 	'1.0',
-		// );
+		wp_enqueue_script(
+			'advancedtable',
+			GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table.js',
+			array(),
+			'1.0',
+			true
+		);
+		wp_register_style(
+			'advancedtable',
+			GREENSHIFTADDONDEV_DIR_URL . 'assets/css/table.css',
+			array(),
+			'1.0',
+		);
 
-		// wp_register_script(
-		// 	'advancedtable-sort',
-		// 	GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table-sort.js',
-		// 	array(),
-		// 	'1.2',
-		// 	true
-		// );
+		wp_register_script(
+			'advancedtable-sort',
+			GREENSHIFTADDONDEV_DIR_URL . 'assets/js/table-sort.js',
+			array(),
+			'1.2',
+			true
+		);
 	}
 }
 

@@ -34,7 +34,7 @@ function GSmodelinit(current, context = {}) {
     if (child.type !== 'HemisphereLight') {
 
      var animation = gsap.timeline();
-     let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child.uuid);
+     let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) ? JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child.uuid) : '';
      let multikeyframesenable = gs_get_dataset(current, 'multikeyframes');
      let keyframesarray = [];
 
