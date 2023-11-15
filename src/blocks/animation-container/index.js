@@ -189,25 +189,40 @@ registerBlockType('greenshift-blocks/animation-container2', {
         } = props;
 
         useEffect(() => {
-            gsap.matchMedia().add(
-                { isDesktop: "(min-width: 768px)", isMobile: "(max-width: 767px)" },
-                t => {
-                    let e = document.getElementsByClassName("gs-gsap-wrap");
-                    if (e.length > 0) {
-                        for (let a = 0; a < e.length; a++)GSmodelinit(e[a], "Scene");
-                        gsapscrolledfind && document.addEventListener("lazyloaded", function (t) { ScrollTrigger.refresh() })
+            let mobilecheck = gsap.matchMedia();
+            mobilecheck.add({
+                isDesktop: '(min-width: 768px)',
+                isMobile: '(max-width: 767px)',
+            }, (context) => {
+                let gs_wrappers = document.getElementsByClassName('gs-gsap-wrap');
+                if (gs_wrappers.length > 0) {
+                    for (let i = 0; i < gs_wrappers.length; i++) {
+                        let current = gs_wrappers[i];
+                        GSmodelinit(current, 'Scene', context);
+                    };
+
+                    if (gsapscrolledfind) { //Compatibility with lazy load script
+                        document.addEventListener('lazyloaded', function (e) {
+                            ScrollTrigger.refresh();
+                        });
                     }
-                    let s = document.querySelectorAll("[data-gsapinit]");
-                    if (s.length > 0)
-                        for (let g = 0; g < s.length; g++)
-                            GSmodelinit(s[g], "Scene")
-                });
+                }
+                let gs_wrappersdata = document.querySelectorAll('[data-gsapinit]');
+                if (gs_wrappersdata.length > 0) {
+                    for (let i = 0; i < gs_wrappersdata.length; i++) {
+                        let current = gs_wrappersdata[i];
+                        GSmodelinit(current, 'Scene', context);
+                    };
+                }
+            })
+
         }, [])
 
-        function GSmodelinit(current, obj = "Scene") {
+        function GSmodelinit(current, obj = "Scene", context = {}) {
             let documentsearch = document;
             var scrollargs = {};
             if (!canvasRef.current) return;
+            if (!canvasRef.current._scene) return;
             if (gs_get_dataset(current, "triggertype"))
                 var triggertype = gs_get_dataset(current, "triggertype");
             else var triggertype = "scroll";
@@ -222,9 +237,9 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 }
             })
 
-            var child1 = canvasRef.current.findObjectById(obj);
+            var object = canvasRef.current.findObjectById(obj);
 
-            if (child1 && child1.name === "Scene") {
+            if (object && object.name === "Scene") {
                 canvasRef.current._scene.traverse((child) => {
                     if (child.type !== 'HemisphereLight') {
 
@@ -234,7 +249,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         let keyframesarray = [];
 
                         if (multianimations && multianimations.length) {
-                            let children = app.findObjectById(child.uuid);
+                            let children = canvasRef.current.findObjectById(child.uuid);
 
                             for (let curr = 0; curr < multianimations.length; curr++) {
                                 let rx = multianimations[curr].rx ? multianimations[curr].rx : children.rotation.x;
@@ -364,6 +379,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                 );
                             }
                             else {
+                                animation.play();
                                 gsapscrolledfind = true;
                                 scrollargs.trigger = curantrigger;
                                 let isMobile = (typeof context.conditions != 'undefined') ? context.conditions.isMobile : false;
@@ -414,18 +430,13 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                 scrollargs.animation = animation;
                                 scrollargs.fastScrollEnd = true;
 
-                                if (gs_get_dataset(current, 'scrollcontainer') == 'yes') {
-                                    let closeX = current.closest('.gs-gsap-scrollx');
-                                    if (closeX) {
-                                        let scrollXid = ScrollTrigger.getById("gspagescrollx" + closeX.getAttribute('id'));
-                                        if (scrollXid) {
-                                            let anX = scrollXid.animation.getById(closeX.getAttribute('id'));
-                                            if (anX) {
-                                                scrollargs.containerAnimation = anX;
-                                            }
-                                        }
-                                    }
-                                };
+                                if (gs_get_dataset(current, 'pinpreview')) {
+                                    scrollargs.pinType = "fixed";
+                                }
+                                let inEditor = true;
+                                let scrollerfind = (typeof inEditor == 'boolean') ? ".interface-interface-skeleton__content" : inEditor;
+                                scrollargs.scroller = scrollerfind;
+
                                 if (gs_get_dataset(current, 'scrollernav') == 'yes') {
                                     scrollargs.scroller = current.closest('.gspb_pagenav');
                                 }
@@ -437,25 +448,24 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         }
                     }
                 })
-            } else if(child1) {
+            } else if (object) {
                 var animation = gsap.timeline();
-                let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) && JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child1.uuid);
+                let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) && JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === object.uuid);
                 let multikeyframesenable = gs_get_dataset(current, 'multikeyframes');
                 let keyframesarray = [];
 
                 if (multianimations && multianimations.length) {
-                    let children = child1;
 
                     for (let curr = 0; curr < multianimations.length; curr++) {
-                        let rx = multianimations[curr].rx ? multianimations[curr].rx : children.rotation.x;
-                        let ry = multianimations[curr].ry ? multianimations[curr].ry : children.rotation.y;
-                        let rz = multianimations[curr].rz ? multianimations[curr].rz : children.rotation.z;
-                        let px = multianimations[curr].x ? multianimations[curr].x : children.position.x;
-                        let py = multianimations[curr].y ? multianimations[curr].y : children.position.y;
-                        let pz = multianimations[curr].z ? multianimations[curr].z : children.position.z;
-                        let scx = multianimations[curr].sx ? multianimations[curr].sx : children.scale.x;
-                        let scy = multianimations[curr].sy ? multianimations[curr].sy : children.scale.y;
-                        let scz = multianimations[curr].sz ? multianimations[curr].sz : children.scale.z;
+                        let rx = multianimations[curr].rx ? multianimations[curr].rx : object.rotation.x;
+                        let ry = multianimations[curr].ry ? multianimations[curr].ry : object.rotation.y;
+                        let rz = multianimations[curr].rz ? multianimations[curr].rz : object.rotation.z;
+                        let px = multianimations[curr].x ? multianimations[curr].x : object.position.x;
+                        let py = multianimations[curr].y ? multianimations[curr].y : object.position.y;
+                        let pz = multianimations[curr].z ? multianimations[curr].z : object.position.z;
+                        let scx = multianimations[curr].sx ? multianimations[curr].sx : object.scale.x;
+                        let scy = multianimations[curr].sy ? multianimations[curr].sy : object.scale.y;
+                        let scz = multianimations[curr].sz ? multianimations[curr].sz : object.scale.z;
                         let de = multianimations[curr].delay;
                         let ea = multianimations[curr].ease;
                         let du = multianimations[curr].duration ? multianimations[curr].duration : 1.0;
@@ -498,9 +508,9 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     }
                     //Set animation global properties
                     if (gs_get_dataset(current, 'from') == 'yes') {
-                        animation.from(children, anargs);
+                        animation.from(object, anargs);
                     } else {
-                        animation.to(children, anargs);
+                        animation.to(object, anargs);
                     }
                     if (gs_get_dataset(current, 'delay')) {
                         animation.delay(parseFloat(gs_get_dataset(current, 'delay')));
@@ -521,22 +531,22 @@ registerBlockType('greenshift-blocks/animation-container2', {
                             if (keyframesarray[curr].customobj) {
                                 if (keyframesarray[curr].customobj.indexOf(".") == 0 || keyframesarray[curr].customobj.indexOf("#") == 0) {
                                     if (keyframesarray[curr].customobj.indexOf(".") == 0) {
-                                        children = documentsearch.querySelectorAll(keyframesarray[curr].customobj);
+                                        object = documentsearch.querySelectorAll(keyframesarray[curr].customobj);
                                     }
                                     if (keyframesarray[curr].customobj.indexOf("#") == 0) {
-                                        children = documentsearch.querySelector(keyframesarray[curr].customobj);
+                                        object = documentsearch.querySelector(keyframesarray[curr].customobj);
                                     }
                                 } else {
-                                    children = documentsearch.querySelectorAll('.' + keyframesarray[curr].customobj);
+                                    object = documentsearch.querySelectorAll('.' + keyframesarray[curr].customobj);
                                 }
                             }
 
                             const { from, customtime, customobj, ...currentanimation } = keyframesarray[curr];
                             let values = keyframesarray[curr];
                             if (keyframesarray[curr].from == "yes") {
-                                animation.from(children.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).from(children.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").from(children.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
+                                animation.from(object.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).from(object.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").from(object.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
                             } else {
-                                animation.to(children.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).to(children.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").to(children.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
+                                animation.to(object.rotation, { x: values.rotation.x, y: values.rotation.y, z: values.rotation.z, delay: values.delay, duration: values.duration }).to(object.position, { x: values.position.x, y: values.position.y, z: values.position.z, delay: values.delay, duration: values.duration }, "<").to(object.scale, { x: values.scale.x, y: values.scale.y, z: values.scale.z, delay: values.delay, duration: values.duration }, "<")
                             }
                         }
                     }
@@ -574,6 +584,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         );
                     }
                     else {
+                        animation.play();
+
                         gsapscrolledfind = true;
                         scrollargs.trigger = curantrigger;
                         let isMobile = (typeof context.conditions != 'undefined') ? context.conditions.isMobile : false;
@@ -612,8 +624,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                 scrollargs.pinSpacing = false;
                             }
                             if (gs_get_dataset(current, 'pinfade') == 'yes') {
-                                animation.from(children, { autoAlpha: 0, duration: 0.2 }, 0);
-                                animation.to(children, { autoAlpha: 0, duration: 0.2 }, 0.8);
+                                animation.from(object, { autoAlpha: 0, duration: 0.2 }, 0);
+                                animation.to(object, { autoAlpha: 0, duration: 0.2 }, 0.8);
                             }
                         }
                         if (gs_get_dataset(current, 'triggeraction')) {
@@ -624,18 +636,13 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         scrollargs.animation = animation;
                         scrollargs.fastScrollEnd = true;
 
-                        if (gs_get_dataset(current, 'scrollcontainer') == 'yes') {
-                            let closeX = current.closest('.gs-gsap-scrollx');
-                            if (closeX) {
-                                let scrollXid = ScrollTrigger.getById("gspagescrollx" + closeX.getAttribute('id'));
-                                if (scrollXid) {
-                                    let anX = scrollXid.animation.getById(closeX.getAttribute('id'));
-                                    if (anX) {
-                                        scrollargs.containerAnimation = anX;
-                                    }
-                                }
-                            }
-                        };
+                        if (gs_get_dataset(current, 'pinpreview')) {
+                            scrollargs.pinType = "fixed";
+                        }
+                        let inEditor = true;
+                        let scrollerfind = (typeof inEditor == 'boolean') ? ".interface-interface-skeleton__content" : inEditor;
+                        scrollargs.scroller = scrollerfind;
+
                         if (gs_get_dataset(current, 'scrollernav') == 'yes') {
                             scrollargs.scroller = current.closest('.gspb_pagenav');
                         }
@@ -742,9 +749,9 @@ registerBlockType('greenshift-blocks/animation-container2', {
 
                     if (gsapquick && canvasRef.current && model_animations) {
                         if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                            GSmodelinit(gsapquick, false, true, ownerDocument, id);
+                            GSmodelinit(gsapquick, gs_get_dataset(gsapquick, 'target'), id);
                         } else {
-                            GSmodelinit(gsapquick, true, false, ownerDocument, id);
+                            GSmodelinit(gsapquick, gs_get_dataset(gsapquick, 'target'), id);
                         }
                     }
                     if (gsapquick) {
@@ -875,8 +882,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     let test_objects = [];
                     const model_url2 = oldCanvas.getAttribute("url");
 
-                    if (oldCanvas.children.length > 1) {
-                        oldCanvas.children[1].remove();
+                    if (oldCanvas.children.length) {
+                        oldCanvas.children[0].remove();
                         const newCanvas = document.createElement('canvas');
                         const contextWebGL = newCanvas.getContext('webgl2');
                         oldCanvas.appendChild(newCanvas);
@@ -886,15 +893,19 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         oldCanvas.appendChild(newCanvas);
                     }
 
-                    const app = new Application(oldCanvas.children[1]);
+                    const app = new Application(oldCanvas.children[0]);
                     canvasRef.current = app;
 
                     app.load(model_url2).then(() => {
                         getobjects(app._scene);
                         setAttributes({ td_objects: test_objects });
-                        app._scene.traverse((child) => {
-                        })
-                    });
+                    }).catch((error) => {
+                        // Handle the error state
+                        console.error("Error occurred while loading the model:", error);
+                        setAttributes({model_url: ''});
+                        oldCanvas.children[0].remove();
+                        // Set the error state or perform any necessary actions
+                    });;
 
                     // treeselect contructor----------------------------------------------//
                     function getobjects(object) {
@@ -910,7 +921,10 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                 let children;
                                 children = getobjects(child);
                                 childrens2.push(children);
-                                childrens.push({ id: child.uuid, name: child.name, children: childrens2 });
+                                if (child.children.length <= 1)
+                                    childrens.push(children);
+                                else childrens.push({ id: child.uuid, name: child.name, children: childrens2 });
+
                                 // }
 
                             });
@@ -938,20 +952,13 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 <Inspector animationref={AnimationRef.current} {...props} />
                 <BlockToolBar {...props} />
                 <div className="gs-animation" ref={AnimationRef}>
-                    {/* <div
-                        // editor={true}
-                        // {...props}
-                        style={{ display: 'flex' }}
-                        class='animationmodel'
-                        id={`gs_spline_${id}`}
-                        url={model_url}
-                    >
-                    </div> */}
                     <AnimationContainer editor={true} {...props} {...blockProps}>
+                        {animation_type != '3d_model' && !model_url &&
 
-                        <InnerBlocks
-                            renderAppender={() => hasChildBlocks ? <InnerBlocks.DefaultBlockAppender /> : <InnerBlocks.ButtonBlockAppender />}
-                        />
+                            <InnerBlocks
+                                renderAppender={() => hasChildBlocks ? <InnerBlocks.DefaultBlockAppender /> : <InnerBlocks.ButtonBlockAppender />}
+                            />
+                        }
                     </AnimationContainer>
                 </div>
             </>
@@ -959,22 +966,12 @@ registerBlockType('greenshift-blocks/animation-container2', {
     },
 
     save(props) {
-        // const blockProps = useBlockProps.save();
         return (
             <>
-                {/* <div
-                    // editor={true}
-                    // {...props}
-                    style={{ display: 'flex' }}
-                    class='animationmodel'
-                    id={`gs_spline_${attributes.id}`}
-                    url={attributes.model_url}
-                >
-                </div> */}
-                <AnimationContainer editor={false} {...props}>
+                < AnimationContainer editor={false} {...props} >
 
                     <InnerBlocks.Content />
-                </AnimationContainer>
+                </AnimationContainer >
             </>
 
         );

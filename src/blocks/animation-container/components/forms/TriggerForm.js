@@ -106,7 +106,7 @@ const TriggerForm = (props) => {
 
 	return (
 		<div className="gs-inspector-form-inspector">
-			{animation_type != "batch" && (
+			{animation_type != "batch" && animation_type != '3d_model' && (
 				<>
 					<span className="gspb_inspector_property-title">
 						{__("Trigger type", 'greenshiftgsap')}
@@ -119,10 +119,24 @@ const TriggerForm = (props) => {
 							{ label: __("Batch Scroll", 'greenshiftgsap'), value: "batch" },
 							{ label: __("On Hover", 'greenshiftgsap'), value: "hover" },
 							{ label: __("On Click", 'greenshiftgsap'), value: "click" },
-							{ label: __("Toggle Click", 'greenshiftgsap'), value: "toggleclick" },
-							{ label: __("Slide Change", 'greenshiftgsap'), value: "slidechange" },
-							{ label: __("Observer", 'greenshiftgsap'), value: "observe" },
-							{ label: __("Mouse Follow", 'greenshiftgsap'), value: "mousefollow" },
+						]}
+						onChange={(value) => setAttributes({ triggertype: value })}
+						help={<TriggerDocLink />}
+					/>
+				</>
+			)}
+			{animation_type == '3d_model' && (
+				<>
+					<span className="gspb_inspector_property-title">
+						{__("Trigger type", 'greenshiftgsap')}
+					</span>
+					<SelectControl
+						value={triggertype}
+						options={[
+							{ label: __("Scroll trigger", 'greenshiftgsap'), value: "scroll" },
+							{ label: __("On load", 'greenshiftgsap'), value: "load" },
+							{ label: __("On Hover", 'greenshiftgsap'), value: "hover" },
+							{ label: __("On Click", 'greenshiftgsap'), value: "click" },
 						]}
 						onChange={(value) => setAttributes({ triggertype: value })}
 						help={<TriggerDocLink />}
@@ -312,16 +326,16 @@ const TriggerForm = (props) => {
 								/>
 								<div></div>
 
-							<RangeControl
-								value={triggerscrub}
-								trackColor='#2184f9'
-								onChange={(value) => setAttributes({ triggerscrub: parseFloat(value) })}
-								min={0.1}
-								max={5}
-								help={__(
-									"By default, scroll will trigger full animation. If you want to play animation by scrolling, place here number of seconds for feedback. Better to check how it works on Frontend. Recommended value for interpolation is 1.", 'greenshiftgsap'
-								)}
-							/>
+								<RangeControl
+									value={triggerscrub}
+									trackColor='#2184f9'
+									onChange={(value) => setAttributes({ triggerscrub: parseFloat(value) })}
+									min={0.1}
+									max={5}
+									help={__(
+										"By default, scroll will trigger full animation. If you want to play animation by scrolling, place here number of seconds for feedback. Better to check how it works on Frontend. Recommended value for interpolation is 1.", 'greenshiftgsap'
+									)}
+								/>
 							</>
 						</>
 					)}

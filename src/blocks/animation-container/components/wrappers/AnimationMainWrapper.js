@@ -245,20 +245,7 @@ const AnimationMainWrapper = (props) => {
             data-scrollernav={scrollernav ? 'yes' : null}
             url = {model_url}
         >
-            {/* {(model_url && animation_type === "3d_model") ? ( */}
-            
-            {/* <div
-                // editor={true}
-                // {...props}
-                style={{ display: 'flex' }}
-                class='animationmodel'
-                id={`gs_spline_${id}`}
-                url={model_url}
-            >
-            </div> */}
-            {/* // ) : */}
             {children}
-            <canvas />
         </div>
     );
 };

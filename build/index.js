@@ -11159,7 +11159,7 @@ const TriggerForm = props => {
   }))));
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "gs-inspector-form-inspector"
-  }, animation_type != "batch" && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, animation_type != "batch" && animation_type != '3d_model' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "gspb_inspector_property-title"
   }, __("Trigger type", 'greenshiftgsap')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
     value: triggertype,
@@ -11178,18 +11178,27 @@ const TriggerForm = props => {
     }, {
       label: __("On Click", 'greenshiftgsap'),
       value: "click"
+    }],
+    onChange: value => setAttributes({
+      triggertype: value
+    }),
+    help: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TriggerDocLink, null)
+  })), animation_type == '3d_model' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "gspb_inspector_property-title"
+  }, __("Trigger type", 'greenshiftgsap')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: triggertype,
+    options: [{
+      label: __("Scroll trigger", 'greenshiftgsap'),
+      value: "scroll"
     }, {
-      label: __("Toggle Click", 'greenshiftgsap'),
-      value: "toggleclick"
+      label: __("On load", 'greenshiftgsap'),
+      value: "load"
     }, {
-      label: __("Slide Change", 'greenshiftgsap'),
-      value: "slidechange"
+      label: __("On Hover", 'greenshiftgsap'),
+      value: "hover"
     }, {
-      label: __("Observer", 'greenshiftgsap'),
-      value: "observe"
-    }, {
-      label: __("Mouse Follow", 'greenshiftgsap'),
-      value: "mousefollow"
+      label: __("On Click", 'greenshiftgsap'),
+      value: "click"
     }],
     onChange: value => setAttributes({
       triggertype: value
@@ -12085,7 +12094,7 @@ const AnimationMainWrapper = props => {
     "data-scrollcontainer": scrollcontainer ? 'yes' : null,
     "data-scrollernav": scrollernav ? 'yes' : null,
     url: model_url
-  }, children, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("canvas", null));
+  }, children);
 };
 /* harmony default export */ __webpack_exports__["default"] = (AnimationMainWrapper);
 
@@ -12508,26 +12517,42 @@ registerBlockType('greenshift-blocks/animation-container2', {
       setAttributes
     } = props;
     (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-      gsap.matchMedia().add({
-        isDesktop: "(min-width: 768px)",
-        isMobile: "(max-width: 767px)"
-      }, t => {
-        let e = document.getElementsByClassName("gs-gsap-wrap");
-        if (e.length > 0) {
-          for (let a = 0; a < e.length; a++) GSmodelinit(e[a], "Scene");
-          gsapscrolledfind && document.addEventListener("lazyloaded", function (t) {
-            ScrollTrigger.refresh();
-          });
+      let mobilecheck = gsap.matchMedia();
+      mobilecheck.add({
+        isDesktop: '(min-width: 768px)',
+        isMobile: '(max-width: 767px)'
+      }, context => {
+        let gs_wrappers = document.getElementsByClassName('gs-gsap-wrap');
+        if (gs_wrappers.length > 0) {
+          for (let i = 0; i < gs_wrappers.length; i++) {
+            let current = gs_wrappers[i];
+            GSmodelinit(current, 'Scene', context);
+          }
+          ;
+          if (gsapscrolledfind) {
+            //Compatibility with lazy load script
+            document.addEventListener('lazyloaded', function (e) {
+              ScrollTrigger.refresh();
+            });
+          }
         }
-        let s = document.querySelectorAll("[data-gsapinit]");
-        if (s.length > 0) for (let g = 0; g < s.length; g++) GSmodelinit(s[g], "Scene");
+        let gs_wrappersdata = document.querySelectorAll('[data-gsapinit]');
+        if (gs_wrappersdata.length > 0) {
+          for (let i = 0; i < gs_wrappersdata.length; i++) {
+            let current = gs_wrappersdata[i];
+            GSmodelinit(current, 'Scene', context);
+          }
+          ;
+        }
       });
     }, []);
     function GSmodelinit(current) {
       let obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Scene";
+      let context = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       let documentsearch = document;
       var scrollargs = {};
       if (!canvasRef.current) return;
+      if (!canvasRef.current._scene) return;
       if (gs_get_dataset(current, "triggertype")) var triggertype = gs_get_dataset(current, "triggertype");else var triggertype = "scroll";
       current.getAttribute("data-prehidden") && current.removeAttribute("data-prehidden");
       var anargs = {};
@@ -12539,8 +12564,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
           obj = children.uuid;
         }
       });
-      var child1 = canvasRef.current.findObjectById(obj);
-      if (child1 && child1.name === "Scene") {
+      var object = canvasRef.current.findObjectById(obj);
+      if (object && object.name === "Scene") {
         canvasRef.current._scene.traverse(child => {
           if (child.type !== 'HemisphereLight') {
             var animation = gsap.timeline();
@@ -12548,7 +12573,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
             let multikeyframesenable = gs_get_dataset(current, 'multikeyframes');
             let keyframesarray = [];
             if (multianimations && multianimations.length) {
-              let children = app.findObjectById(child.uuid);
+              let children = canvasRef.current.findObjectById(child.uuid);
               for (let curr = 0; curr < multianimations.length; curr++) {
                 let rx = multianimations[curr].rx ? multianimations[curr].rx : children.rotation.x;
                 let ry = multianimations[curr].ry ? multianimations[curr].ry : children.rotation.y;
@@ -12710,6 +12735,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                   animation.play();
                 });
               } else {
+                animation.play();
                 gsapscrolledfind = true;
                 scrollargs.trigger = curantrigger;
                 let isMobile = typeof context.conditions != 'undefined' ? context.conditions.isMobile : false;
@@ -12763,19 +12789,12 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 }
                 scrollargs.animation = animation;
                 scrollargs.fastScrollEnd = true;
-                if (gs_get_dataset(current, 'scrollcontainer') == 'yes') {
-                  let closeX = current.closest('.gs-gsap-scrollx');
-                  if (closeX) {
-                    let scrollXid = ScrollTrigger.getById("gspagescrollx" + closeX.getAttribute('id'));
-                    if (scrollXid) {
-                      let anX = scrollXid.animation.getById(closeX.getAttribute('id'));
-                      if (anX) {
-                        scrollargs.containerAnimation = anX;
-                      }
-                    }
-                  }
+                if (gs_get_dataset(current, 'pinpreview')) {
+                  scrollargs.pinType = "fixed";
                 }
-                ;
+                let inEditor = true;
+                let scrollerfind = typeof inEditor == 'boolean' ? ".interface-interface-skeleton__content" : inEditor;
+                scrollargs.scroller = scrollerfind;
                 if (gs_get_dataset(current, 'scrollernav') == 'yes') {
                   scrollargs.scroller = current.closest('.gspb_pagenav');
                 }
@@ -12787,23 +12806,22 @@ registerBlockType('greenshift-blocks/animation-container2', {
             }
           }
         });
-      } else if (child1) {
+      } else if (object) {
         var animation = gsap.timeline();
-        let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) && JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child1.uuid);
+        let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) && JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === object.uuid);
         let multikeyframesenable = gs_get_dataset(current, 'multikeyframes');
         let keyframesarray = [];
         if (multianimations && multianimations.length) {
-          let children = child1;
           for (let curr = 0; curr < multianimations.length; curr++) {
-            let rx = multianimations[curr].rx ? multianimations[curr].rx : children.rotation.x;
-            let ry = multianimations[curr].ry ? multianimations[curr].ry : children.rotation.y;
-            let rz = multianimations[curr].rz ? multianimations[curr].rz : children.rotation.z;
-            let px = multianimations[curr].x ? multianimations[curr].x : children.position.x;
-            let py = multianimations[curr].y ? multianimations[curr].y : children.position.y;
-            let pz = multianimations[curr].z ? multianimations[curr].z : children.position.z;
-            let scx = multianimations[curr].sx ? multianimations[curr].sx : children.scale.x;
-            let scy = multianimations[curr].sy ? multianimations[curr].sy : children.scale.y;
-            let scz = multianimations[curr].sz ? multianimations[curr].sz : children.scale.z;
+            let rx = multianimations[curr].rx ? multianimations[curr].rx : object.rotation.x;
+            let ry = multianimations[curr].ry ? multianimations[curr].ry : object.rotation.y;
+            let rz = multianimations[curr].rz ? multianimations[curr].rz : object.rotation.z;
+            let px = multianimations[curr].x ? multianimations[curr].x : object.position.x;
+            let py = multianimations[curr].y ? multianimations[curr].y : object.position.y;
+            let pz = multianimations[curr].z ? multianimations[curr].z : object.position.z;
+            let scx = multianimations[curr].sx ? multianimations[curr].sx : object.scale.x;
+            let scy = multianimations[curr].sy ? multianimations[curr].sy : object.scale.y;
+            let scz = multianimations[curr].sz ? multianimations[curr].sz : object.scale.z;
             let de = multianimations[curr].delay;
             let ea = multianimations[curr].ease;
             let du = multianimations[curr].duration ? multianimations[curr].duration : 1.0;
@@ -12846,9 +12864,9 @@ registerBlockType('greenshift-blocks/animation-container2', {
           }
           //Set animation global properties
           if (gs_get_dataset(current, 'from') == 'yes') {
-            animation.from(children, anargs);
+            animation.from(object, anargs);
           } else {
-            animation.to(children, anargs);
+            animation.to(object, anargs);
           }
           if (gs_get_dataset(current, 'delay')) {
             animation.delay(parseFloat(gs_get_dataset(current, 'delay')));
@@ -12867,13 +12885,13 @@ registerBlockType('greenshift-blocks/animation-container2', {
               if (keyframesarray[curr].customobj) {
                 if (keyframesarray[curr].customobj.indexOf(".") == 0 || keyframesarray[curr].customobj.indexOf("#") == 0) {
                   if (keyframesarray[curr].customobj.indexOf(".") == 0) {
-                    children = documentsearch.querySelectorAll(keyframesarray[curr].customobj);
+                    object = documentsearch.querySelectorAll(keyframesarray[curr].customobj);
                   }
                   if (keyframesarray[curr].customobj.indexOf("#") == 0) {
-                    children = documentsearch.querySelector(keyframesarray[curr].customobj);
+                    object = documentsearch.querySelector(keyframesarray[curr].customobj);
                   }
                 } else {
-                  children = documentsearch.querySelectorAll('.' + keyframesarray[curr].customobj);
+                  object = documentsearch.querySelectorAll('.' + keyframesarray[curr].customobj);
                 }
               }
               const {
@@ -12884,19 +12902,19 @@ registerBlockType('greenshift-blocks/animation-container2', {
               } = keyframesarray[curr];
               let values = keyframesarray[curr];
               if (keyframesarray[curr].from == "yes") {
-                animation.from(children.rotation, {
+                animation.from(object.rotation, {
                   x: values.rotation.x,
                   y: values.rotation.y,
                   z: values.rotation.z,
                   delay: values.delay,
                   duration: values.duration
-                }).from(children.position, {
+                }).from(object.position, {
                   x: values.position.x,
                   y: values.position.y,
                   z: values.position.z,
                   delay: values.delay,
                   duration: values.duration
-                }, "<").from(children.scale, {
+                }, "<").from(object.scale, {
                   x: values.scale.x,
                   y: values.scale.y,
                   z: values.scale.z,
@@ -12904,19 +12922,19 @@ registerBlockType('greenshift-blocks/animation-container2', {
                   duration: values.duration
                 }, "<");
               } else {
-                animation.to(children.rotation, {
+                animation.to(object.rotation, {
                   x: values.rotation.x,
                   y: values.rotation.y,
                   z: values.rotation.z,
                   delay: values.delay,
                   duration: values.duration
-                }).to(children.position, {
+                }).to(object.position, {
                   x: values.position.x,
                   y: values.position.y,
                   z: values.position.z,
                   delay: values.delay,
                   duration: values.duration
-                }, "<").to(children.scale, {
+                }, "<").to(object.scale, {
                   x: values.scale.x,
                   y: values.scale.y,
                   z: values.scale.z,
@@ -12955,6 +12973,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
               animation.play();
             });
           } else {
+            animation.play();
             gsapscrolledfind = true;
             scrollargs.trigger = curantrigger;
             let isMobile = typeof context.conditions != 'undefined' ? context.conditions.isMobile : false;
@@ -12991,11 +13010,11 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 scrollargs.pinSpacing = false;
               }
               if (gs_get_dataset(current, 'pinfade') == 'yes') {
-                animation.from(children, {
+                animation.from(object, {
                   autoAlpha: 0,
                   duration: 0.2
                 }, 0);
-                animation.to(children, {
+                animation.to(object, {
                   autoAlpha: 0,
                   duration: 0.2
                 }, 0.8);
@@ -13008,19 +13027,12 @@ registerBlockType('greenshift-blocks/animation-container2', {
             }
             scrollargs.animation = animation;
             scrollargs.fastScrollEnd = true;
-            if (gs_get_dataset(current, 'scrollcontainer') == 'yes') {
-              let closeX = current.closest('.gs-gsap-scrollx');
-              if (closeX) {
-                let scrollXid = ScrollTrigger.getById("gspagescrollx" + closeX.getAttribute('id'));
-                if (scrollXid) {
-                  let anX = scrollXid.animation.getById(closeX.getAttribute('id'));
-                  if (anX) {
-                    scrollargs.containerAnimation = anX;
-                  }
-                }
-              }
+            if (gs_get_dataset(current, 'pinpreview')) {
+              scrollargs.pinType = "fixed";
             }
-            ;
+            let inEditor = true;
+            let scrollerfind = typeof inEditor == 'boolean' ? ".interface-interface-skeleton__content" : inEditor;
+            scrollargs.scroller = scrollerfind;
             if (gs_get_dataset(current, 'scrollernav') == 'yes') {
               scrollargs.scroller = current.closest('.gspb_pagenav');
             }
@@ -13114,9 +13126,9 @@ registerBlockType('greenshift-blocks/animation-container2', {
           let ownerDocument = AnimationRef.current.ownerDocument;
           if (gsapquick && canvasRef.current && model_animations) {
             if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-              GSmodelinit(gsapquick, false, true, ownerDocument, id);
+              GSmodelinit(gsapquick, gs_get_dataset(gsapquick, 'target'), id);
             } else {
-              GSmodelinit(gsapquick, true, false, ownerDocument, id);
+              GSmodelinit(gsapquick, gs_get_dataset(gsapquick, 'target'), id);
             }
           }
           if (gsapquick) {
@@ -13155,8 +13167,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
         if (oldCanvas && oldCanvas.getAttribute("url")) {
           let test_objects = [];
           const model_url2 = oldCanvas.getAttribute("url");
-          if (oldCanvas.children.length > 1) {
-            oldCanvas.children[1].remove();
+          if (oldCanvas.children.length) {
+            oldCanvas.children[0].remove();
             const newCanvas = document.createElement('canvas');
             const contextWebGL = newCanvas.getContext('webgl2');
             oldCanvas.appendChild(newCanvas);
@@ -13165,15 +13177,23 @@ registerBlockType('greenshift-blocks/animation-container2', {
             const contextWebGL = newCanvas.getContext('webgl2');
             oldCanvas.appendChild(newCanvas);
           }
-          const app = new _libs_splinetool_runtime_js__WEBPACK_IMPORTED_MODULE_8__.Application(oldCanvas.children[1]);
+          const app = new _libs_splinetool_runtime_js__WEBPACK_IMPORTED_MODULE_8__.Application(oldCanvas.children[0]);
           canvasRef.current = app;
           app.load(model_url2).then(() => {
             getobjects(app._scene);
             setAttributes({
               td_objects: test_objects
             });
-            app._scene.traverse(child => {});
+          }).catch(error => {
+            // Handle the error state
+            console.error("Error occurred while loading the model:", error);
+            setAttributes({
+              model_url: ''
+            });
+            oldCanvas.children[0].remove();
+            // Set the error state or perform any necessary actions
           });
+          ;
 
           // treeselect contructor----------------------------------------------//
           function getobjects(object) {
@@ -13191,11 +13211,12 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 let children;
                 children = getobjects(child);
                 childrens2.push(children);
-                childrens.push({
+                if (child.children.length <= 1) childrens.push(children);else childrens.push({
                   id: child.uuid,
                   name: child.name,
                   children: childrens2
                 });
+
                 // }
               });
 
@@ -13225,12 +13246,11 @@ registerBlockType('greenshift-blocks/animation-container2', {
       ref: AnimationRef
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_AnimationContainer__WEBPACK_IMPORTED_MODULE_6__["default"], (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
       editor: true
-    }, props, blockProps), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks, {
+    }, props, blockProps), animation_type != '3d_model' && !model_url && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks, {
       renderAppender: () => hasChildBlocks ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks.DefaultBlockAppender, null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks.ButtonBlockAppender, null)
     }))));
   },
   save(props) {
-    // const blockProps = useBlockProps.save();
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_AnimationContainer__WEBPACK_IMPORTED_MODULE_6__["default"], (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
       editor: false
     }, props), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InnerBlocks.Content, null)));
