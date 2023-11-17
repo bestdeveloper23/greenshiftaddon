@@ -83,7 +83,7 @@ const Inspector = (props) => {
 					<InspectorTabs tabs={['general', 'advance']} activeAdvance={(csstransformchange || positionchange || responsivechange || mouse_move_enabled || scroll_parallax_enabled || reveal_enabled || widthchange) ? true : false}>
 						<InspectorTab key={'general'}>
 							<PanelBody title={__("Common options")} initialOpen={true}>
-								<ProChecker addonVar={greenshiftGSAP.can_use_premium_code} />
+								{/* <ProChecker addonVar={greenshiftGSAP.can_use_premium_code} /> */}
 								<CommonForm {...props} />
 							</PanelBody>
 							<PanelBody title={__("Animation options")} initialOpen={true}>
@@ -96,7 +96,7 @@ const Inspector = (props) => {
 								<PanelBody title={__("Available objects")} initialOpen={true}>
 									<TreeSelect
 										label="Select object"
-										noOptionLabel="Full model"
+										noOptionLabel="Select object"
 										onChange={(value) => setAttributes({ selected_object: value })}
 										tree={td_objects}
 									/>

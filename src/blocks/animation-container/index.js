@@ -21,6 +21,8 @@ import Inspector from './components/inspector';
 import { Application } from '../../../libs/splinetool/runtime.js';
 
 import { useBlockProps } from '@wordpress/block-editor';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Import gspb depenedencies
 const { gspb_setBlockId } = gspblib.utilities;
@@ -83,6 +85,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
     edit(props) {
 
         const blockProps = useBlockProps();
+        // ScrollTrigger.create({});
+        gsap.registerPlugin(ScrollTrigger);
         // Set Unique Block ID
         useEffect(() => {
             gspb_setBlockId(props);
@@ -189,6 +193,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
         } = props;
 
         useEffect(() => {
+            let gsapscrolledfind = true;
             let mobilecheck = gsap.matchMedia();
             mobilecheck.add({
                 isDesktop: '(min-width: 768px)',
@@ -218,6 +223,10 @@ registerBlockType('greenshift-blocks/animation-container2', {
 
         }, [])
 
+        function gs_get_dataset(elem, attribute) {
+            return elem.getAttribute('data-' + attribute);
+        };
+
         function GSmodelinit(current, obj = "Scene", context = {}) {
             let documentsearch = document;
             var scrollargs = {};
@@ -228,6 +237,8 @@ registerBlockType('greenshift-blocks/animation-container2', {
             else var triggertype = "scroll";
             current.getAttribute("data-prehidden") && current.removeAttribute("data-prehidden");
             var anargs = {};
+            var camera = {};
+            var selected_camera = false;
             canvasRef.current._scene.traverse((children) => {
                 if (children.type && children.type !== 'HemisphereLight') {
                     gsap.killTweensOf(canvasRef.current.findObjectById(children.uuid));
@@ -235,6 +246,11 @@ registerBlockType('greenshift-blocks/animation-container2', {
                 if (children.name === "Scene" && obj === "Scene") {
                     obj = children.uuid;
                 }
+                if (children.type == "Camera" && !selected_camera) {
+                    camera = children;
+                    selected_camera = true;
+                }
+
             })
 
             var object = canvasRef.current.findObjectById(obj);
@@ -244,13 +260,17 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     if (child.type !== 'HemisphereLight') {
 
                         var animation = gsap.timeline();
-                        let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child.uuid);
+                        let multianimations = JSON.parse(gs_get_dataset(current, "modelanimations")) && JSON.parse(gs_get_dataset(current, "modelanimations")).slice().filter(item => item._objectkey === child.uuid);
                         let multikeyframesenable = gs_get_dataset(current, 'multikeyframes');
                         let keyframesarray = [];
-
                         if (multianimations && multianimations.length) {
-                            let children = canvasRef.current.findObjectById(child.uuid);
 
+                            if (child.name == 'Scene') {
+                                var children1 = camera;
+                                var children = canvasRef.current.findObjectById(child.uuid);
+                            } else {
+                                var children = canvasRef.current.findObjectById(child.uuid);
+                            }
                             for (let curr = 0; curr < multianimations.length; curr++) {
                                 let rx = multianimations[curr].rx ? multianimations[curr].rx : children.rotation.x;
                                 let ry = multianimations[curr].ry ? multianimations[curr].ry : children.rotation.y;
@@ -380,7 +400,6 @@ registerBlockType('greenshift-blocks/animation-container2', {
                             }
                             else {
                                 animation.play();
-                                gsapscrolledfind = true;
                                 scrollargs.trigger = curantrigger;
                                 let isMobile = (typeof context.conditions != 'undefined') ? context.conditions.isMobile : false;
                                 let useMobile = (gs_get_dataset(current, 'useMobile') == 'yes') ? true : false;
@@ -417,10 +436,10 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                     if (gs_get_dataset(current, 'pinspace')) {
                                         scrollargs.pinSpacing = false;
                                     }
-                                    if (gs_get_dataset(current, 'pinfade') == 'yes') {
-                                        animation.from(children, { autoAlpha: 0, duration: 0.2 }, 0);
-                                        animation.to(children, { autoAlpha: 0, duration: 0.2 }, 0.8);
-                                    }
+                                    // if (gs_get_dataset(current, 'pinfade') == 'yes') {
+                                    //     animation.from(children, { autoAlpha: 0, duration: 0.2 }, 0);
+                                    //     animation.to(children, { autoAlpha: 0, duration: 0.2 }, 0.8);
+                                    // }
                                 }
                                 if (gs_get_dataset(current, 'triggeraction')) {
                                     scrollargs.toggleActions = gs_get_dataset(current, 'triggeraction');
@@ -551,6 +570,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                         }
                     }
                     //Set trigger for animation
+                    animation.play()
                     let curantrigger = '';
                     if (current.getAttribute('data-customtrigger')) {
                         if (current.getAttribute('data-customtrigger').indexOf("#") == 0 || current.getAttribute('data-customtrigger').indexOf(".") == 0) {
@@ -586,7 +606,6 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     else {
                         animation.play();
 
-                        gsapscrolledfind = true;
                         scrollargs.trigger = curantrigger;
                         let isMobile = (typeof context.conditions != 'undefined') ? context.conditions.isMobile : false;
                         let useMobile = (gs_get_dataset(current, 'useMobile') == 'yes') ? true : false;
@@ -689,48 +708,48 @@ registerBlockType('greenshift-blocks/animation-container2', {
                                     GSmodelinit(gsapquick, gs_get_dataset(gsapquick, "target"));
                                 }
                             }
-                            let stgsap = ScrollTrigger.getById('gsinit' + id);
-                            if (stgsap) stgsap.kill();
-                            gsap.killTweensOf(gsapquick);
-                            gsapquick.style = '';
-                            if (typeof gsapsplitTextinit != 'undefined' && gsapsplitTextinit) {
-                                gsapsplitTextinit.revert();
-                            }
-                            if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                                GSinit(gsapquick, false, true, ownerDocument, id);
-                            } else {
-                                GSinit(gsapquick, true, false, ownerDocument, id);
-                            }
+                            // let stgsap = ScrollTrigger.getById('gsinit' + id);
+                            // if (stgsap) stgsap.kill();
+                            // gsap.killTweensOf(gsapquick);
+                            // gsapquick.style = '';
+                            // if (typeof gsapsplitTextinit != 'undefined' && gsapsplitTextinit) {
+                            //     gsapsplitTextinit.revert();
+                            // }
+                            // if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                            //     GSinit(gsapquick, false, true, ownerDocument, id);
+                            // } else {
+                            //     GSinit(gsapquick, true, false, ownerDocument, id);
+                            // }
                         }
-                        const revealtransform = AnimationRef.current.querySelector('.gs-reveal-wrap');
-                        if (revealtransform) {
-                            let revealobj = revealtransform.querySelector('.gs-reveal-block');
-                            let streveal = ScrollTrigger.getById('gsreveal' + id);
-                            if (streveal) streveal.kill();
-                            gsap.killTweensOf(revealobj);
-                            if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                                gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
-                                GSrevealinit(revealtransform, false, true, id);
-                            } else {
-                                gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
-                                GSrevealinit(revealtransform, true, true, id);
-                            }
+                        // const revealtransform = AnimationRef.current.querySelector('.gs-reveal-wrap');
+                        // if (revealtransform) {
+                        //     let revealobj = revealtransform.querySelector('.gs-reveal-block');
+                        //     let streveal = ScrollTrigger.getById('gsreveal' + id);
+                        //     if (streveal) streveal.kill();
+                        //     gsap.killTweensOf(revealobj);
+                        //     if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                        //         gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
+                        //         GSrevealinit(revealtransform, false, true, id);
+                        //     } else {
+                        //         gsap.killTweensOf(canvasRef.current.findObjectById(gs_get_dataset(gsapquick, "target")));
+                        //         GSrevealinit(revealtransform, true, true, id);
+                        //     }
 
-                        }
-                        const parallaxobj = AnimationRef.current.querySelector('.gs-gsap-parallax');
-                        if (parallaxobj) {
-                            let stparallax = ScrollTrigger.getById('gsparallax' + id);
-                            if (stparallax) stparallax.kill();
-                            gsap.killTweensOf(parallaxobj);
-                            if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                                GSparallaxinit(parallaxobj, true, id);
-                            }
-                        }
-                        const mousetransform = AnimationRef.current.querySelector('.gs-prlx-mouse');
-                        if (mousetransform) {
-                            gsap.killTweensOf(mousetransform);
-                            GSmousemoveinit(mousetransform);
-                        }
+                        // }
+                        // const parallaxobj = AnimationRef.current.querySelector('.gs-gsap-parallax');
+                        // if (parallaxobj) {
+                        //     let stparallax = ScrollTrigger.getById('gsparallax' + id);
+                        //     if (stparallax) stparallax.kill();
+                        //     gsap.killTweensOf(parallaxobj);
+                        //     if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                        //         GSparallaxinit(parallaxobj, true, id);
+                        //     }
+                        // }
+                        // const mousetransform = AnimationRef.current.querySelector('.gs-prlx-mouse');
+                        // if (mousetransform) {
+                        //     gsap.killTweensOf(mousetransform);
+                        //     GSmousemoveinit(mousetransform);
+                        // }
                     });
                 }
                 return () => { isStillMounted.current = false; };
@@ -754,31 +773,31 @@ registerBlockType('greenshift-blocks/animation-container2', {
                             GSmodelinit(gsapquick, gs_get_dataset(gsapquick, 'target'), id);
                         }
                     }
-                    if (gsapquick) {
-                        if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                            GSinit(gsapquick, false, true, ownerDocument, id);
-                        } else {
-                            GSinit(gsapquick, true, false, ownerDocument, id);
-                        }
-                    }
-                    const revealtransform = AnimationRef.current.querySelector('.gs-reveal-wrap');
-                    if (revealtransform) {
-                        if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                            GSrevealinit(revealtransform, false, true, id);
-                        } else {
-                            GSrevealinit(revealtransform, true, true, id);
-                        }
-                    }
-                    const parallaxobj = AnimationRef.current.querySelector('.gs-gsap-parallax');
-                    if (parallaxobj) {
-                        if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
-                            GSparallaxinit(parallaxobj, true, id);
-                        }
-                    }
-                    const mousetransform = AnimationRef.current.querySelector('.gs-prlx-mouse');
-                    if (mousetransform) {
-                        GSmousemoveinit(mousetransform);
-                    }
+                    // if (gsapquick) {
+                    //     if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                    //         GSinit(gsapquick, false, true, ownerDocument, id);
+                    //     } else {
+                    //         GSinit(gsapquick, true, false, ownerDocument, id);
+                    //     }
+                    // }
+                    // const revealtransform = AnimationRef.current.querySelector('.gs-reveal-wrap');
+                    // if (revealtransform) {
+                    //     if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                    //         GSrevealinit(revealtransform, false, true, id);
+                    //     } else {
+                    //         GSrevealinit(revealtransform, true, true, id);
+                    //     }
+                    // }
+                    // const parallaxobj = AnimationRef.current.querySelector('.gs-gsap-parallax');
+                    // if (parallaxobj) {
+                    //     if (ownerDocument.body.classList.contains('gspb-bodyadmin')) {
+                    //         GSparallaxinit(parallaxobj, true, id);
+                    //     }
+                    // }
+                    // const mousetransform = AnimationRef.current.querySelector('.gs-prlx-mouse');
+                    // if (mousetransform) {
+                    //     GSmousemoveinit(mousetransform);
+                    // }
                 }
             } else {
                 debounce(attributes);
@@ -895,6 +914,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
 
                     const app = new Application(oldCanvas.children[0]);
                     canvasRef.current = app;
+                    canvasRef.current.stop();
 
                     app.load(model_url2).then(() => {
                         getobjects(app._scene);
@@ -902,7 +922,7 @@ registerBlockType('greenshift-blocks/animation-container2', {
                     }).catch((error) => {
                         // Handle the error state
                         console.error("Error occurred while loading the model:", error);
-                        setAttributes({model_url: ''});
+                        setAttributes({ model_url: '' });
                         oldCanvas.children[0].remove();
                         // Set the error state or perform any necessary actions
                     });;
