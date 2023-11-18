@@ -85,9 +85,9 @@ if (!function_exists('greenShiftAddondev_register_init')) {
 		);
 
 		wp_enqueue_script(
-			'gsap-scrolltrigger',
+			'gsapaddondev-scrolltrigger',
 			GREENSHIFTADDONDEV_DIR_URL . 'libs/gsap/ScrollTrigger.min.js',
-			array('gsap-animation'),
+			array(),
 			'3.12.2',
 			true
 		);

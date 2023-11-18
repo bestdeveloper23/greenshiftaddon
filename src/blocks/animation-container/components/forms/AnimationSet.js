@@ -1,12 +1,12 @@
 import animationsTypes from "./Animationstype";
 
 const { __ } = wp.i18n;
-import { TextControl, SelectControl, ToggleControl, BaseControl, __experimentalNumberControl as NumberControl, __experimentalAlignmentMatrixControl as AlignmentMatrixControl } from '@wordpress/components';
+import { PanelBody, TreeSelect, TextControl, SelectControl, ToggleControl, BaseControl, __experimentalNumberControl as NumberControl, __experimentalAlignmentMatrixControl as AlignmentMatrixControl } from '@wordpress/components';
 const { BlpgeColorPicker, RadioAdvanced } = gspblib.components;
 
 const AnimationSet = ({ id, props }) => {
     const {
-        attributes: { animation_type, multiple_animation, multikeyframes, model_animations },
+        attributes: { animation_type, multiple_animation, multikeyframes, model_animations, td_objects },
         setAttributes,
     } = props;
 
@@ -32,6 +32,16 @@ const AnimationSet = ({ id, props }) => {
     return (
         <>
             <div className="gs-inspector-form-inspector">
+
+                <TreeSelect
+                    label="Select object"
+                    noOptionLabel="Select object"
+                    onChange={(value) => updateAnimationSetOption("_objectkey", value)}
+                    // onChange={(value) => console.log(value)}
+                    selectedId={animationTarget._objectkey}
+                    tree={td_objects}
+                />
+
                 <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                     <div class="gspb_row__col--4">
                         <BaseControl>

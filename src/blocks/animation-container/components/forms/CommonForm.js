@@ -18,9 +18,11 @@ const CommonForm = (props) => {
             r,
             rx,
             ry,
+            rz,
             s,
             sx,
             sy,
+            sz,
             o,
             background,
             origin,
@@ -57,9 +59,11 @@ const CommonForm = (props) => {
             rM,
             rxM,
             ryM,
+            rzM,
             sM,
             sxM,
             syM,
+            szM,
             oM,
             skewXM,
             skewYM,
@@ -208,148 +212,233 @@ const CommonForm = (props) => {
             <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                 <div class="gspb_row__col--4">
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ rM: parseInt(value) })}
-                            label={__('Rotation', 'greenshiftgsap')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={10}
-                            step={1}
-                            value={rM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ rxM: parseInt(value) })}
+                                label={__('Rotation X', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={rxM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ rM: parseInt(value) })}
+                                label={__('Rotation', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={rM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
                 <div class="gspb_row__col--4">
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ rxM: parseInt(value) })}
-                            label={__('X')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={10}
-                            step={1}
-                            value={rxM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ ryM: parseInt(value) })}
+                                label={__('Y')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={ryM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ rxM: parseInt(value) })}
+                                label={__('X')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={rxM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
                 <div class="gspb_row__col--4">
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ ryM: parseInt(value) })}
-                            label={__('Y')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={10}
-                            step={1}
-                            value={ryM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ rzM: parseInt(value) })}
+                                label={__('Z')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={rzM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ ryM: parseInt(value) })}
+                                label={__('Y')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={ryM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
             </div>
             <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                 <div class="gspb_row__col--4">
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ sM: parseFloat(value) })}
-                            label={__('Scale', 'greenshiftgsap')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={1}
-                            min={0}
-                            max={30}
-                            step={0.1}
-                            value={sM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ sxM: parseFloat(value) })}
+                                label={__('Scale X', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={sxM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ sM: parseFloat(value) })}
+                                label={__('Scale', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={sM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
                 <div class="gspb_row__col--4">
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ sxM: parseFloat(value) })}
-                            label={__('X')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={1}
-                            min={0}
-                            max={30}
-                            step={0.1}
-                            value={sxM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ syM: parseFloat(value) })}
+                                label={__('Y')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={syM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ sxM: parseFloat(value) })}
+                                label={__('X')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={sxM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
                 <div class="gspb_row__col--4">
+
                     <BaseControl>
-                        <NumberControl
-                            onChange={(value) => setAttributes({ syM: parseFloat(value) })}
-                            label={__('Y')}
-                            isDragEnabled
-                            isShiftStepEnabled
-                            shiftStep={1}
-                            min={0}
-                            max={30}
-                            step={0.1}
-                            value={syM}
-                        />
+                        {animation_type === '3d_model' ?
+                            <NumberControl
+                                onChange={(value) => setAttributes({ szM: parseFloat(value) })}
+                                label={__('Z')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={szM}
+                            /> :
+                            <NumberControl
+                                onChange={(value) => setAttributes({ syM: parseFloat(value) })}
+                                label={__('Y')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={1}
+                                min={0}
+                                max={30}
+                                step={0.1}
+                                value={syM}
+                            />
+                        }
+
                     </BaseControl>
                 </div>
             </div>
-            <BaseControl className="gs-label-row">
-                <NumberControl
-                    onChange={(value) => setAttributes({ oM: parseInt(value) })}
-                    label={__("Opacity", 'greenshiftgsap')}
-                    isDragEnabled
-                    isShiftStepEnabled
-                    shiftStep={10}
-                    min={0}
-                    step={1}
-                    max={100}
-                    value={oM}
-                />
-            </BaseControl>
-            <BaseControl className="gs-label-row">
-                <NumberControl
-                    onChange={(value) => setAttributes({ xoM: parseInt(value) })}
-                    label={__('X (%)', 'greenshiftgsap')}
-                    isDragEnabled
-                    isShiftStepEnabled
-                    shiftStep={10}
-                    step={1}
-                    value={xoM}
-                />
-            </BaseControl>
-            <BaseControl className="gs-label-row">
-                <NumberControl
-                    onChange={(value) => setAttributes({ yoM: parseInt(value) })}
-                    label={__('Y (%)', 'greenshiftgsap')}
-                    isDragEnabled
-                    isShiftStepEnabled
-                    shiftStep={10}
-                    step={1}
-                    value={yoM}
-                />
-            </BaseControl>
-            <BaseControl className="gs-label-row">
-                <NumberControl
-                    onChange={(value) => setAttributes({ skewXM: parseInt(value) })}
-                    label={__('Skew X', 'greenshift')}
-                    isDragEnabled
-                    isShiftStepEnabled
-                    shiftStep={10}
-                    step={1}
-                    value={skewXM}
-                />
-            </BaseControl>
-            <BaseControl className="gs-label-row">
-                <NumberControl
-                    onChange={(value) => setAttributes({ skewYM: parseInt(value) })}
-                    label={__('Skew Y', 'greenshift')}
-                    isDragEnabled
-                    isShiftStepEnabled
-                    shiftStep={10}
-                    step={1}
-                    value={skewYM}
-                />
-            </BaseControl>
+            {animation_type !== '3d_model' &&
+                <>
+                    <BaseControl className="gs-label-row">
+                        <NumberControl
+                            onChange={(value) => setAttributes({ oM: parseInt(value) })}
+                            label={__("Opacity", 'greenshiftgsap')}
+                            isDragEnabled
+                            isShiftStepEnabled
+                            shiftStep={10}
+                            min={0}
+                            step={1}
+                            max={100}
+                            value={oM}
+                        />
+                    </BaseControl>
+                    <BaseControl className="gs-label-row">
+                        <NumberControl
+                            onChange={(value) => setAttributes({ xoM: parseInt(value) })}
+                            label={__('X (%)', 'greenshiftgsap')}
+                            isDragEnabled
+                            isShiftStepEnabled
+                            shiftStep={10}
+                            step={1}
+                            value={xoM}
+                        />
+                    </BaseControl>
+                    <BaseControl className="gs-label-row">
+                        <NumberControl
+                            onChange={(value) => setAttributes({ yoM: parseInt(value) })}
+                            label={__('Y (%)', 'greenshiftgsap')}
+                            isDragEnabled
+                            isShiftStepEnabled
+                            shiftStep={10}
+                            step={1}
+                            value={yoM}
+                        />
+                    </BaseControl>
+                    <BaseControl className="gs-label-row">
+                        <NumberControl
+                            onChange={(value) => setAttributes({ skewXM: parseInt(value) })}
+                            label={__('Skew X', 'greenshift')}
+                            isDragEnabled
+                            isShiftStepEnabled
+                            shiftStep={10}
+                            step={1}
+                            value={skewXM}
+                        />
+                    </BaseControl>
+                    <BaseControl className="gs-label-row">
+                        <NumberControl
+                            onChange={(value) => setAttributes({ skewYM: parseInt(value) })}
+                            label={__('Skew Y', 'greenshift')}
+                            isDragEnabled
+                            isShiftStepEnabled
+                            shiftStep={10}
+                            step={1}
+                            value={skewYM}
+                        />
+                    </BaseControl>
+                </>
+
+            }
+
             <>
                 <span className="gspb_inspector_property-title">
                     {__("Trigger start", 'greenshiftgsap')}
@@ -457,7 +546,7 @@ const CommonForm = (props) => {
     return (
         <div className="gs-inspector-form-inspector">
             <div>{__('Select type', 'greenshiftgsap')}</div>
-            <StylesforBlock columns={3} value={animation_type} onChange={(val) => {setAttributes({ animation_type: val })}}
+            <StylesforBlock columns={3} value={animation_type} onChange={(val) => { setAttributes({ animation_type: val }) }}
                 options={[
                     { value: 'regular', svg: rtransform, label: __('Transform', 'greenshiftgsap') },
                     { value: 'stagger_transformations', svg: staggertransform, label: __('Stagger', 'greenshiftgsap') },
@@ -713,6 +802,7 @@ const CommonForm = (props) => {
                                     varwidthopen
                                 }
                             /></div>
+
                         <BaseControl>
                             <NumberControl
                                 onChange={(value) => setAttributes({ x: parseInt(value) })}
@@ -779,148 +869,231 @@ const CommonForm = (props) => {
                 <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ r: parseInt(value) })}
-                                label={__('Rotation', 'greenshiftgsap')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={r}
-                            />
+                            {animation_type === '3d_model' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ rx: parseInt(value) })}
+                                    label={__('Rotation X', 'greenshiftgsap')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={rx}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ r: parseInt(value) })}
+                                    label={__('Rotation', 'greenshiftgsap')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={r}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ rx: parseInt(value) })}
-                                label={__('X')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={rx}
-                            />
+                            {animation_type === '3d_model' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ ry: parseInt(value) })}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={ry}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ rx: parseInt(value) })}
+                                    label={__('X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={rx}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ ry: parseInt(value) })}
-                                label={__('Y')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={10}
-                                step={1}
-                                value={ry}
-                            />
+                            {animation_type === '3d_model' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ rz: parseInt(value) })}
+                                    label={__('Z')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={rz}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ ry: parseInt(value) })}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={10}
+                                    step={1}
+                                    value={ry}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                 </div>
                 <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ s: parseFloat(value) })}
-                                label={__('Scale', 'greenshiftgsap')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={1000}
-                                step={0.1}
-                                value={s}
-                            />
+                            {animation_type === '3d_mode' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ sx: parseFloat(value) })}
+                                    label={__('Scale X', 'greenshiftgsap')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={sx}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ s: parseFloat(value) })}
+                                    label={__('Scale', 'greenshiftgsap')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={s}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ sx: parseFloat(value) })}
-                                label={__('X')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={1000}
-                                step={0.1}
-                                value={sx}
-                            />
+                            {animation_type === '3d_model' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ sy: parseFloat(value) })}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={sy}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ sx: parseFloat(value) })}
+                                    label={__('X')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={sx}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                     <div class="gspb_row__col--4">
                         <BaseControl>
-                            <NumberControl
-                                onChange={(value) => setAttributes({ sy: parseFloat(value) })}
-                                label={__('Y')}
-                                isDragEnabled
-                                isShiftStepEnabled
-                                shiftStep={1}
-                                min={0}
-                                max={1000}
-                                step={0.1}
-                                value={sy}
-                            />
+                            {animation_type === '3d_model' ?
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ sz: parseFloat(value) })}
+                                    label={__('Z')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={sz}
+                                /> :
+                                <NumberControl
+                                    onChange={(value) => setAttributes({ sy: parseFloat(value) })}
+                                    label={__('Y')}
+                                    isDragEnabled
+                                    isShiftStepEnabled
+                                    shiftStep={1}
+                                    min={0}
+                                    max={1000}
+                                    step={0.1}
+                                    value={sy}
+                                />
+                            }
+
                         </BaseControl>
                     </div>
                 </div>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => setAttributes({ o: parseInt(value) })}
-                        label={__("Opacity", 'greenshiftgsap')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        min={0}
-                        step={1}
-                        max={100}
-                        value={o}
-                    />
-                </BaseControl>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => setAttributes({ xo: parseInt(value) })}
-                        label={__('Translate X (%)', 'greenshiftgsap')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={xo}
-                    />
-                </BaseControl>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => setAttributes({ yo: parseInt(value) })}
-                        label={__('Translate Y (%)', 'greenshiftgsap')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={yo}
-                    />
-                </BaseControl>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => setAttributes({ skewX: parseInt(value) })}
-                        label={__('Skew X', 'greenshift')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={skewX}
-                    />
-                </BaseControl>
-                <BaseControl className="gs-label-row">
-                    <NumberControl
-                        onChange={(value) => setAttributes({ skewY: parseInt(value) })}
-                        label={__('Skew Y', 'greenshift')}
-                        isDragEnabled
-                        isShiftStepEnabled
-                        shiftStep={10}
-                        step={1}
-                        value={skewY}
-                    />
-                </BaseControl>
+                {animation_type !== '3d_model' &&
+                    <>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => setAttributes({ o: parseInt(value) })}
+                                label={__("Opacity", 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                min={0}
+                                step={1}
+                                max={100}
+                                value={o}
+                            />
+                        </BaseControl>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => setAttributes({ xo: parseInt(value) })}
+                                label={__('Translate X (%)', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={xo}
+                            />
+                        </BaseControl>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => setAttributes({ yo: parseInt(value) })}
+                                label={__('Translate Y (%)', 'greenshiftgsap')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={yo}
+                            />
+                        </BaseControl>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => setAttributes({ skewX: parseInt(value) })}
+                                label={__('Skew X', 'greenshift')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={skewX}
+                            />
+                        </BaseControl>
+                        <BaseControl className="gs-label-row">
+                            <NumberControl
+                                onChange={(value) => setAttributes({ skewY: parseInt(value) })}
+                                label={__('Skew Y', 'greenshift')}
+                                isDragEnabled
+                                isShiftStepEnabled
+                                shiftStep={10}
+                                step={1}
+                                value={skewY}
+                            />
+                        </BaseControl>
+                    </>
+                }
+
                 <div
                     className="gspb_row gspb_row--no-padding-col"
                     style={{ marginTop: '10px', width: '100%' }}

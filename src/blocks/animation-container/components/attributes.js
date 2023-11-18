@@ -68,6 +68,11 @@ export default {
         default: null
     },
 
+    rz: {
+        type: 'number',
+        default: null
+    },
+
     s: {
         type: 'number',
         default: null
@@ -82,6 +87,12 @@ export default {
         type: 'number',
         default: null
     },
+
+    sz: {
+        type: 'number',
+        default: null
+    },
+
     skewX: {
         type: 'number',
         default: null
@@ -498,6 +509,11 @@ export default {
         default: null
     },
 
+    rzM: {
+        type: 'number',
+        default: null
+    },
+
     sM: {
         type: 'number',
         default: null
@@ -512,6 +528,12 @@ export default {
         type: 'number',
         default: null
     },
+
+    szM: {
+        type: 'number',
+        default: null
+    },
+
     oM: {
         type: 'number',
         default: null

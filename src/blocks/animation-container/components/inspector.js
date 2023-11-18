@@ -92,7 +92,7 @@ const Inspector = (props) => {
 							<PanelBody title={__("Trigger option")} initialOpen={true}>
 								<TriggerForm {...props} />
 							</PanelBody>
-							{animation_type === "3d_model" && (
+							{/* {animation_type === "3d_model" && (
 								<PanelBody title={__("Available objects")} initialOpen={true}>
 									<TreeSelect
 										label="Select object"
@@ -101,7 +101,7 @@ const Inspector = (props) => {
 										tree={td_objects}
 									/>
 								</PanelBody>
-							)}
+							)} */}
 							<PanelBody title={__("Multiple Animation")} initialOpen={false}>
 								<MultipleAnimation {...props} />
 							</PanelBody>

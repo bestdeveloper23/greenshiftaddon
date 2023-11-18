@@ -16,9 +16,11 @@ const AnimationMainWrapper = (props) => {
             r,
             rx,
             ry,
+            rz,
             s,
             sx,
             sy,
+            sz,
             o,
             skewX,
             skewY,
@@ -82,9 +84,11 @@ const AnimationMainWrapper = (props) => {
             rM,
             rxM,
             ryM,
+            rzM,
             sM,
             sxM,
             syM,
+            szM,
             oM,
             skewXM,
             skewYM,
@@ -136,6 +140,7 @@ const AnimationMainWrapper = (props) => {
         <div
             id={id}
             className="gs-gsap-wrap"
+            data-animationType = {animation_type ? animation_type : '3d_model'}
             data-x={(x && Number.isFinite(x)) ? x : null}
             data-y={(y && Number.isFinite(y)) ? y : null}
             data-z={(z && Number.isFinite(z)) ? z : null}
@@ -144,9 +149,11 @@ const AnimationMainWrapper = (props) => {
             data-r={(r && Number.isFinite(r)) ? r : null}
             data-rx={(rx && Number.isFinite(rx)) ? rx : null}
             data-ry={(ry && Number.isFinite(ry)) ? ry : null}
+            data-rz={(rz && Number.isFinite(rz)) ? rz : null}
             data-s={(s && Number.isFinite(s)) ? s : null}
             data-sx={(sx && Number.isFinite(sx)) ? sx : null}
             data-sy={(sy && Number.isFinite(sy)) ? sy : null}
+            data-sz={(sz && Number.isFinite(sz)) ? sz : null}
             data-skewX={(skewX && Number.isFinite(skewX)) ? skewX : null}
             data-skewY={(skewY && Number.isFinite(skewY)) ? skewY : null}
             data-width={width ? width : null}
@@ -218,9 +225,11 @@ const AnimationMainWrapper = (props) => {
             data-rM={(rM && Number.isFinite(rM)) ? rM : null}
             data-rxM={(rxM && Number.isFinite(rxM)) ? rxM : null}
             data-ryM={(ryM && Number.isFinite(ryM)) ? ryM : null}
+            data-rzM={(rzM && Number.isFinite(rzM)) ? rzM : null}
             data-sM={(sM && Number.isFinite(sM)) ? sM : null}
             data-sxM={(sxM && Number.isFinite(sxM)) ? sxM : null}
             data-syM={(syM && Number.isFinite(syM)) ? syM : null}
+            data-szM={(szM && Number.isFinite(szM)) ? szM : null}
             data-skewXM={(skewXM && Number.isFinite(skewXM)) ? skewXM : null}
             data-skewYM={(skewYM && Number.isFinite(skewYM)) ? skewYM : null}
             data-oM={(oM || oM === 0) ? oM : null}
