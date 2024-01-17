@@ -631,5 +631,9 @@ export default {
     zoomIn: {
         type: 'number',
         default: 1,
+    },
+    zoomTF: {
+        type: 'boolean',
+        default: false,
     }
 }

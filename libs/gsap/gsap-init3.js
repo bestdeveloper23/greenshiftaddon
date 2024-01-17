@@ -4,7 +4,7 @@ import { Application } from '../splinetool/runtime.js';
 var gsapscrolledfind = false;
 var gsapsplitTextinit = '';
 
-function GSmodelinit(app, current, init = false, context = {}) {
+function GSmodelinit(app, current, zoomtf = false, init = false, context = {}) {
     let documentsearch = document;
     var scrollargs = {};
     if(!app) return;
@@ -37,8 +37,8 @@ function GSmodelinit(app, current, init = false, context = {}) {
             const zoom = JSON.parse(gs_get_dataset(current, 'zoomIn'));
             if(init){
                 app.setZoom(zoom);
-            } else {
-                app.setZoom(splinezoom)
+            } else if(zoomtf){
+                app.setZoom(splinezoom);
             }
             app._scene.traverse((child) => {
                 if (child.type !== 'HemisphereLight') {

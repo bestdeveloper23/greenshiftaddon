@@ -113,7 +113,8 @@ const CommonForm = (props) => {
       variables,
       splineApp,
       splinezoom,
-      zoomIn
+      zoomIn,
+      zoomTF,
     },
     setAttributes,
   } = props;
@@ -624,7 +625,7 @@ const CommonForm = (props) => {
               /> */}
               <button
                 className="components-button components-icon-button components-toolbar__control"
-                onClick={() => {let zoom = zoomIn*1.1; setAttributes({splinezoom: 1.1, zoomIn: zoom})}}
+                onClick={() => {let zoom = zoomIn*1.1; setAttributes({splinezoom: 1.1, zoomIn: zoom, zoomTF: true})}}
               >
                 <i
                   class="rhicon rhi-plus"
@@ -636,7 +637,7 @@ const CommonForm = (props) => {
               </button>
               <button
                 className="components-button components-icon-button components-toolbar__control"
-                onClick={() => {let zoom = zoomIn*0.9; setAttributes({splinezoom: 0.9, zoomIn: zoom})}}
+                onClick={() => {let zoom = zoomIn*0.9; setAttributes({splinezoom: 0.9, zoomIn: zoom, zoomTF: true})}}
               >
                 <i
                   class="rhicon rhi-minus"

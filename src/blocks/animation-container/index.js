@@ -181,6 +181,7 @@ registerBlockType("greenshift-blocks/animation-container2", {
         splineApp,
         splinezoom,
         zoomIn,
+        zoomTF
       },
       setAttributes,
     } = props;
@@ -964,7 +965,10 @@ registerBlockType("greenshift-blocks/animation-container2", {
               // }
 
               // const app = new splineAppRef.current(gsapquick.children[0]);
-              GSmodelinit(canvasRef.current, gsapquick);
+              const zooming = JSON.parse(gs_get_dataset(gsapquick, 'zoomTF'));
+              console.log(zooming);
+              GSmodelinit(canvasRef.current, gsapquick, zooming);
+              setAttributes({zoomTF: false});
             }
             // const revealtransform = AnimationRef.current.querySelector(".gs-reveal-wrap");
             // if (revealtransform) {
@@ -1023,7 +1027,9 @@ registerBlockType("greenshift-blocks/animation-container2", {
         
           if(splineAppRef.current){
             const app = new splineAppRef.current(gsapquick.children[0]);
-            GSmodelinit(app, gsapquick);  
+            console.log(zoomTF);
+            GSmodelinit(app, gsapquick, zoomTF);
+            setAttributes({zoomTF: false});
           }
         
         }
