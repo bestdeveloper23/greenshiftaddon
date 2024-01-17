@@ -22,6 +22,7 @@ export const AnimationContainer = (props) => {
     const {
         attributes: {
             id,
+            inlineCssStyles,
             scroll_parallax_enabled,
             mouse_move_enabled,
             reveal_enabled,
@@ -46,7 +47,9 @@ export const AnimationContainer = (props) => {
             reveal_clip,
             reveal_dir,
             flexbox,
+            clipInit
         },
+        isChange,
         clientId,
         className
     } = props;
@@ -72,7 +75,7 @@ export const AnimationContainer = (props) => {
     // Flex Align
     final_css = gspb_flex_cssGen(
         flexbox,
-        'body.gspb-bodyfront ' + css_selector_by_user + ' > .gs-gsap-wrap',
+        'body.gspb-bodyfront ' + css_selector_by_user + ' > .gs-gsap-wrap-3d',
         final_css,
         false
     );
@@ -95,7 +98,7 @@ export const AnimationContainer = (props) => {
     // blockWidth
     final_css = gspb_width_cssGen(
         blockWidth,
-        `${css_selector_by_user}, body.gspb-bodyfront ${css_selector_by_user} > .gs-gsap-wrap`,
+        `${css_selector_by_user}, body.gspb-bodyfront ${css_selector_by_user} > .gs-gsap-wrap-3d`,
         final_css,
     );
 
@@ -113,7 +116,7 @@ export const AnimationContainer = (props) => {
             final_css
         );
         final_css = gspb_cssGen(
-            `${css_selector_by_user} .gs-gsap-wrap`,
+            `${css_selector_by_user} .gs-gsap-wrap-3d`,
             ['position'],
             ['relative'],
             final_css
@@ -124,7 +127,7 @@ export const AnimationContainer = (props) => {
     if (animation_type == 'stagger_transformations') {
         if ((o == 1 || o === 0) && set_from) {
             if (stchild) {
-                final_css += `body.gspb-bodyfront ${css_selector_by_user} .gs-gsap-wrap > *{visibility:hidden}`;
+                final_css += `body.gspb-bodyfront ${css_selector_by_user} .gs-gsap-wrap-3d > *{visibility:hidden}`;
             } else if (stagger) {
                 final_css += `body.gspb-bodyfront ${css_selector_by_user} ${stagger}{visibility:hidden}`;
             }
@@ -133,7 +136,7 @@ export const AnimationContainer = (props) => {
     else if (animation_type == 'batch') {
         if ((o == 1 || o === 0) && set_from) {
             if (batchchild) {
-                final_css += `body.gspb-bodyfront ${css_selector_by_user} .gs-gsap-wrap > *{visibility:hidden}`;
+                final_css += `body.gspb-bodyfront ${css_selector_by_user} .gs-gsap-wrap-3d > *{visibility:hidden}`;
             } else if (customtrigger) {
                 final_css += `body.gspb-bodyfront ${css_selector_by_user} ${customtrigger}{visibility:hidden}`;
             }
@@ -148,7 +151,7 @@ export const AnimationContainer = (props) => {
         if (customtrigger && customtrigger != 'window') {
             final_css += `${customtrigger}{perspective:inherit !important}`;
         }
-        final_css += `${css_selector_by_user} .gs-gsap-wrap{position:fixed;top:0;left:0;z-index:99999;pointer-events:none;visibility:hidden}`;
+        final_css += `${css_selector_by_user} .gs-gsap-wrap-3d{position:fixed;top:0;left:0;z-index:99999;pointer-events:none;visibility:hidden}`;
     }
 
     if (textmask && (text == 'words' || text == 'chars')) {
@@ -176,7 +179,10 @@ export const AnimationContainer = (props) => {
         } else {
             final_css += `${css_selector_by_user} .gs-reveal-cont{clip-path: inset(0% 100% 0% 0%)}`;
         }
+    }
 
+    if(clipInit){
+        final_css += `${css_selector_by_user} .gs-gsap-wrap-3d{clip-path: ${clipInit}}`;
     }
 
     // Get The Stored CSS
@@ -192,18 +198,18 @@ export const AnimationContainer = (props) => {
 
     editor_css = gspb_flex_cssGen(
         flexbox,
-        `${css_selector_by_user} > .gs-gsap-wrap > .block-editor-inner-blocks > .block-editor-block-list__layout`,
+        `${css_selector_by_user} > .gs-gsap-wrap-3d > .block-editor-inner-blocks > .block-editor-block-list__layout`,
         editor_css
     );
 
     editor_css = gspb_width_cssGen(
         blockWidth,
-        `${css_selector_by_user} > .gs-gsap-wrap > .block-editor-inner-blocks > .block-editor-block-list__layout`,
+        `${css_selector_by_user} > .gs-gsap-wrap-3d > .block-editor-inner-blocks > .block-editor-block-list__layout`,
         editor_css,
     );
 
     const propsClassname = {
-        'className': (className && className != 'wp-block-greenshift-blocks-animation-container') ? className : null
+        'className': (className && className != 'wp-block-greenshift-blocks-3d-animation-container') ? className : null
     };
 
     return (

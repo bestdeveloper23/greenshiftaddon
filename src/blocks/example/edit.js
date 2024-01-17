@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { InspectorControls, AlignmentToolbar, BlockControls } from '@wordpress/block-editor';
 import { PanelBody, RangeControl } from '@wordpress/components';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash/isEqual';
 import attributesDefault from './attributes';
 
 // Import greenshift dependencies

@@ -9,22 +9,22 @@ const AnimationSetPanelHead = ({ id, index, props, children }) => {
     setAttributes,
   } = props;
 
-  const AnimationsList = animation_type === "3d_model" ? JSON.parse(model_animations).slice() : JSON.parse(multiple_animation).slice();
+  const AnimationsList = JSON.parse(model_animations).slice();
 
   const duplicateAnimationSet = (id) => {
     const animationToDuplicate = AnimationsList.find(
       (item) => item._id === id
     );
 
-    const animationClone = (({ _id, ...others }) => ({ ...others }))(animationToDuplicate);
-
+    const animationClone = (({_id, ...others}) => ({...others}))(animationToDuplicate);
+    
     const newAnimation = {
       _id: btoa(Math.random()).substr(10, 8),
       ...animationClone,
     };
 
     AnimationsList.push(newAnimation);
-    (animation_type === "3d_model") ? setAttributes({ model_animations: JSON.stringify(AnimationsList) }) : setAttributes({ multiple_animation: JSON.stringify(AnimationsList) });
+    setAttributes({ model_animations: JSON.stringify(AnimationsList) });
   };
 
   const removeAnimationSet = (id) => {
@@ -34,7 +34,7 @@ const AnimationSetPanelHead = ({ id, index, props, children }) => {
 
     if (animationToRemove >= 0) {
       AnimationsList.splice(animationToRemove, 1);
-      (animation_type === "3d_model") ? setAttributes({ model_animations: JSON.stringify(AnimationsList) }) : setAttributes({ multiple_animation: JSON.stringify(AnimationsList) });
+      setAttributes({ model_animations: JSON.stringify(AnimationsList) });
     }
   };
 
@@ -42,19 +42,19 @@ const AnimationSetPanelHead = ({ id, index, props, children }) => {
   return (
     <div>
       <div className="gsbp_animation_panel">
-        <span className="gsbp_animation_panel__title" onClick={() => setToogle(!toogle)}> {__('Animation')} - {index + 1} </span>
+        <span className="gsbp_animation_panel__title" onClick={() => setToogle(!toogle)}> {__('Animation')} - {index+1} </span>
         <div className="gsbp_animation_panel__options">
-          <span
-            className="rhicon rhi-window-restore"
-            onClick={() => duplicateAnimationSet(id)}
-          ></span>
-          <span
-            className="rhicon rhi-trash-alt"
-            onClick={() => removeAnimationSet(id)}
-          ></span>
+            <span
+                className="rhicon rhi-window-restore"
+                onClick={() => duplicateAnimationSet(id)}
+            ></span>
+            <span
+                className="rhicon rhi-trash-alt"
+                onClick={() => removeAnimationSet(id)}
+            ></span>
         </div>
       </div>
-      {toogle && children}
+      { toogle && children}
     </div>
   );
 };

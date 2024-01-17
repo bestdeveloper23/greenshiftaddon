@@ -32,15 +32,15 @@ export default {
         default: collectionsObjects.shadow
     },
     x: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     y: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     z: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     xo: {
@@ -67,10 +67,6 @@ export default {
         type: 'number',
         default: null
     },
-    rz: {
-        type: 'number',
-        default: null
-    },
 
     s: {
         type: 'number',
@@ -83,10 +79,6 @@ export default {
     },
 
     sy: {
-        type: 'number',
-        default: null
-    },
-    sz: {
         type: 'number',
         default: null
     },
@@ -196,7 +188,7 @@ export default {
         default: null
     },
 
-    triggertype: {
+    triggertype : {
         type: 'string',
         default: 'scroll'
     },
@@ -470,15 +462,15 @@ export default {
         type: 'string',
     },
     xM: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     yM: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     zM: {
-        type: 'string',
+        type: 'number',
         default: null
     },
     xoM: {
@@ -505,10 +497,6 @@ export default {
         type: 'number',
         default: null
     },
-    rzM: {
-        type: 'number',
-        default: null
-    },
 
     sM: {
         type: 'number',
@@ -521,10 +509,6 @@ export default {
     },
 
     syM: {
-        type: 'number',
-        default: null
-    },
-    szM: {
         type: 'number',
         default: null
     },
@@ -583,10 +567,10 @@ export default {
     scrollernav: {
         type: 'boolean',
     },
-    easecustom: {
+    easecustom:{
         type: 'string',
     },
-    maxX: {
+    maxX:{
         type: 'string',
     },
     color: {
@@ -604,32 +588,7 @@ export default {
     customPropsM: {
         type: 'array',
     },
-    model_url: {
-        type:'string',
-    },
-    td_objects: {
-        type: 'array',
-    },
-    selected_object: {
-        type:'string',
-    },
-    model_animations: {
-        type: 'string',
-        default: '[]',
-    },
     variables: {
         type: 'array',
-        default: null,
-    },
-    splineApp: {
-        type: 'string',
-    },
-    splinezoom: {
-        type: 'number',
-        default: 1,
-    },
-    zoomIn: {
-        type: 'number',
-        default: 1,
     }
 }

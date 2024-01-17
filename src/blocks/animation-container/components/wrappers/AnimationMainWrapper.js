@@ -1,5 +1,3 @@
-import ModelBox from "./ModelBox";
-
 const { gspb_shadow_cssGen } = gspblib.utilities;
 const AnimationMainWrapper = (props) => {
 
@@ -69,13 +67,13 @@ const AnimationMainWrapper = (props) => {
             batchchild,
             prehide,
             variable1,
-            variable2,
-            variable3,
-            variable4,
-            variable1value,
-            variable2value,
-            variable3value,
-            variable4value,
+			variable2,
+			variable3,
+			variable4,
+			variable1value,
+			variable2value,
+			variable3value,
+			variable4value,
             xM,
             yM,
             zM,
@@ -111,10 +109,18 @@ const AnimationMainWrapper = (props) => {
             easecustom,
             maxX,
             scrollernav,
+            color,
+            clipInit,
+            clipFinal,
+            customProps,
+            customPropsM,
             model_url,
             td_objects,
             selected_object,
-            model_animations
+            model_animations,
+            variables,
+            splinezoom,
+            zoomIn
         },
         children,
     } = props;
@@ -130,16 +136,13 @@ const AnimationMainWrapper = (props) => {
 
     // remove unesessary values
     const final_multi_origin = multiple_animation ? JSON.parse(multiple_animation) : [];
-    const modelanimations = model_animations ? JSON.parse(model_animations) : [];
+    const modelanimations = model_animations? JSON.parse(model_animations) : [];
     let batchtrigger = '';
-    if (animation_type == 'batch') {
-        batchtrigger = "batch";
-    }
-
+    
     return (
         <div
             id={id}
-            className="gs-gsap-wrap"
+            className="gs-gsap-wrap-3d"
             data-animationType = {animation_type ? animation_type : '3d_model'}
             data-x={(x && Number.isFinite(x)) ? x : null}
             data-y={(y && Number.isFinite(y)) ? y : null}
@@ -159,8 +162,13 @@ const AnimationMainWrapper = (props) => {
             data-width={width ? width : null}
             data-height={height ? height : null}
             data-boxshadow={final_shadow !== '' ? final_shadow : null}
-            data-o={(o || o === 0) ? o : null}
+            data-o={(o || o===0) ? o : null}
             data-bg={background ? background : null}
+            data-color={color ? color : null}
+            data-clippath={clipFinal ? clipFinal : null}
+            data-customprops={customProps ? JSON.stringify(customProps) : null}
+            data-custompropsM={customPropsM ? JSON.stringify(customPropsM) : null}
+            data-variables={variables ? JSON.stringify(variables) : null}
             data-origin={origin ? origin : null}
             data-ease={ease ? ease : null}
             data-delay={(delay && Number.isFinite(delay)) ? delay : null}
@@ -169,10 +177,6 @@ const AnimationMainWrapper = (props) => {
             data-yoyo={yoyo ? 'yes' : null}
             data-loop={loop ? 'yes' : null}
             data-strandom={strandom ? 'yes' : null}
-            data-text={animation_type === 'text_transformations' ? text : null}
-            data-svgdraw={animation_type === 'svg_line_draw' ? 'yes' : null}
-            data-stagger={animation_type === 'stagger_transformations' ? stagger : null}
-            data-stchild={(animation_type === 'stagger_transformations' && stchild) ? "yes" : null}
             data-triggertype={batchtrigger || triggertype}
             data-customtrigger={customtrigger ? customtrigger : null}
             data-customobject={customobject ? customobject : null}
@@ -184,22 +188,8 @@ const AnimationMainWrapper = (props) => {
             data-pinspace={pinspace ? 'yes' : null}
             data-triggeraction={triggeraction ? triggeraction : null}
             data-triggersnap={(triggersnap && Number.isFinite(triggersnap)) ? triggersnap : null}
-            data-path={(animation_type === 'svg_motion_path' && path) ? path : null}
-            data-path-align={(animation_type === 'svg_motion_path' && path_align) ? path_align : null}
-            data-path-orient={(animation_type === 'svg_motion_path' && path_orient) ? 'yes' : null}
-            data-path-alignx={(animation_type === 'svg_motion_path' && path_align_x) ? path_align_x : null}
-            data-path-aligny={(animation_type === 'svg_motion_path' && path_align_y) ? path_align_y : null}
-            data-path-start={(animation_type === 'svg_motion_path' && path_start) ? path_start : null}
-            data-path-end={(animation_type === 'svg_motion_path' && path_end) ? path_end : null}
-            data-morphstart={(animation_type === 'svg_morph' && morphstart) ? morphstart : null}
-            data-morphend={(animation_type === 'svg_morph' && morphend) ? morphend : null}
-            data-morphorigin={(animation_type === 'svg_morph' && morphorigin) ? morphorigin : null}
-            data-batchint={batchint}
-            data-batchchild={(animation_type === 'batch' && batchchild) ? batchchild : null}
-            data-batchrandom={(animation_type === 'batch' && batchrandom) ? batchrandom : null}
-            data-batchonce={(animation_type === 'batch' && batchonce) ? batchonce : null}
             data-multianimations={
-                (final_multi_origin.length) ? JSON.stringify(final_multi_origin) : null
+                final_multi_origin.length ? JSON.stringify(final_multi_origin) : null
             }
             data-modelanimations={
                 (modelanimations.length) ? JSON.stringify(modelanimations) : null
@@ -208,7 +198,7 @@ const AnimationMainWrapper = (props) => {
             data-stdelay={(stdelay && Number.isFinite(stdelay)) ? stdelay : null}
             data-from={set_from ? 'yes' : null}
             data-multikeyframes={multikeyframes ? 'yes' : null}
-            data-prehidden={((((o == 1 || o === 0) && set_from && animation_type !== 'svg_motion_path') || prehide) && !props.editor) ? 1 : null}
+            data-prehidden={((((o==1 || o===0) && set_from && animation_type !=='svg_motion_path') || prehide) && !props.editor) ? 1 : null}
             data-variable1={variable1 || null}
             data-variable2={variable2 || null}
             data-variable3={variable3 || null}
@@ -232,7 +222,7 @@ const AnimationMainWrapper = (props) => {
             data-szM={(szM && Number.isFinite(szM)) ? szM : null}
             data-skewXM={(skewXM && Number.isFinite(skewXM)) ? skewXM : null}
             data-skewYM={(skewYM && Number.isFinite(skewYM)) ? skewYM : null}
-            data-oM={(oM || oM === 0) ? oM : null}
+            data-oM={(oM || oM===0) ? oM : null}
             data-usemobile={useMobile ? 'yes' : null}
             data-triggerstartM={triggerstartM || null}
             data-triggerendM={triggerendM || null}
@@ -252,7 +242,9 @@ const AnimationMainWrapper = (props) => {
             data-videoplay={videoplay ? 'yes' : null}
             data-scrollcontainer={scrollcontainer ? 'yes' : null}
             data-scrollernav={scrollernav ? 'yes' : null}
-            url = {model_url}
+            url = {model_url ? model_url : null}
+            data-splinezoom={splinezoom ? splinezoom : 1}
+            data-zoomIn={zoomIn ? zoomIn : 1}
         >
             {children}
         </div>

@@ -9,7 +9,7 @@ import AnimationForm from './forms/AnimationForm';
 import CommonForm from './forms/CommonForm';
 import MultipleAnimation from './forms/MultipleAnimation';
 
-import isEqual from "lodash/isEqual";
+import isEqual from 'lodash/isEqual';
 import attributesDefault from './attributes';
 
 const { InspectorControls, BlockControls, AlignmentToolbar } = wp.blockEditor;
@@ -42,6 +42,7 @@ const Inspector = (props) => {
 			variable3value,
 			variable4value,
 			flexAlign,
+			multiple_animation,
 			animation_type,
 			td_objects,
 		},
@@ -92,20 +93,11 @@ const Inspector = (props) => {
 							<PanelBody title={__("Trigger option")} initialOpen={true}>
 								<TriggerForm {...props} />
 							</PanelBody>
-							{/* {animation_type === "3d_model" && (
-								<PanelBody title={__("Available objects")} initialOpen={true}>
-									<TreeSelect
-										label="Select object"
-										noOptionLabel="Select object"
-										onChange={(value) => setAttributes({ selected_object: value })}
-										tree={td_objects}
-									/>
-								</PanelBody>
-							)} */}
-							<PanelBody title={__("Multiple Animation")} initialOpen={false}>
+							
+							<PanelBody title={__("Multiple Animation")} initialOpen={true} className={`${(multiple_animation && multiple_animation !='[]') ? 'gspb_panel_changed' : ''}`}>
 								<MultipleAnimation {...props} />
 							</PanelBody>
-							<PanelBody title={__("Custom css variables")} initialOpen={false}>
+							<PanelBody title={__("Custom css variables")} initialOpen={false} className={`${variable1 ? 'gspb_panel_changed' : ''}`}>
 								<BaseControl help={__("You can also animate your custom css variables values. If you need to set initial values and custom css, do this in Advanced - Responsive and custom css", 'greenshiftgsap')}>
 									<div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
 										<div className="gspb_row__col--8">
@@ -259,7 +251,7 @@ const Inspector = (props) => {
 							<PanelBody title={__("Responsive and Custom CSS", "greenshiftgsap")} initialOpen={false}
 								className={`${!responsivechange ? '' : 'gspb_panel_changed'}`}
 							>
-								<Responsive attributeName="responsive" customstyle="{GREENSHIFT} .gs-gsap-wrap{  }" {...props} />
+								<Responsive attributeName="responsive" customstyle="{GREENSHIFT} .gs-gsap-wrap-3d{  }" {...props} />
 							</PanelBody>
 							{ /* Spacing */}
 							<PanelBody title={__("Spacing", 'greenshiftgsap')} initialOpen={false} className={`${isEqual(attributesDefault.spacing.default, props.attributes.spacing) ? '' : 'gspb_panel_changed'}`}>

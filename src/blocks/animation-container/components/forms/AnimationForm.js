@@ -49,13 +49,13 @@ const AnimationForm = (props) => {
 				</BaseControl>
 				<div className="gspb_row">
 
-					<div className="gspb_row__col--7" style={{ padding: 0 }}>
+					<div className="gspb_row__col--8" style={{ padding: 0 }}>
 						<GsbpFormLabel
 							title={__("Ease type")}
 							clearFun={() => setAttributes({ ease: null })}
 						/>
 					</div>
-					<div className="gspb_row__col--5" style={{ padding: 0 }}>
+					<div className="gspb_row__col--4" style={{ padding: 0 }}>
 						<SelectControl
 							value={ease}
 							options={animationsTypes}

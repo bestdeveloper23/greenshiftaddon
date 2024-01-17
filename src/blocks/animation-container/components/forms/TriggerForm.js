@@ -1,7 +1,7 @@
 const { __ } = wp.i18n;
 import { SelectControl, TextControl, ToggleControl, BaseControl, __experimentalNumberControl as NumberControl, Dropdown, RangeControl } from '@wordpress/components';
 
-const { GsbpFormLabel } = gspblib.components;
+const { GsbpFormLabel, StylesforBlock, RuleBuilder } = gspblib.components;
 
 const TriggerForm = (props) => {
 	const {
@@ -58,79 +58,56 @@ const TriggerForm = (props) => {
 					"By default, plugin will use window scroll tracking, but if you have blocks with own scroll, you can set scroll object with id(use #) or class (use .) here", 'greenshiftgsap'
 				)}
 			/>
-			{triggertype != 'batch' && (
-				<>
-					<>
-						<span className="gspb_inspector_property-title">
-							{__("Trigger actions", 'greenshiftgsap')}
-						</span>
-						<TextControl
-							value={triggeraction}
-							onChange={(value) =>
-								setAttributes({ triggeraction: value })
-							}
-							help={__("Determines how the linked animation is controlled at the 4 distinct toggle places - onEnter, onLeave, onEnterBack, and onLeaveBack. Possible values: play, pause, resume, reset, restart, complete, reverse, and none. Default is: play pause resume reset", 'greenshiftgsap')}
-						/>
-					</>
-					<BaseControl className="gs-label-row" help={__("Formula: 1 / (number of section - 1). Snap are working only on frontend part of site", 'greenshiftgsap')}>
-						<NumberControl
-							onChange={(value) => setAttributes({ triggersnap: parseFloat(value) })}
-							label={__('Scroll snap', 'greenshiftgsap')}
-							isDragEnabled
-							isShiftStepEnabled
-							shiftStep={0.1}
-							min={0}
-							max={1}
-							step={0.01}
-							value={triggersnap}
-						/>
-					</BaseControl>
-					<BaseControl className="gs-label-row" help={__("Use this option if your animation is part of Horizontal Section Scroll block", 'greenshiftgsap')}>
-						<ToggleControl
-							label={__("Horizontal scroll?", 'greenshiftgsap')}
-							checked={scrollcontainer}
-							onChange={(value) => setAttributes({ scrollcontainer: value })}
-						/>
-					</BaseControl>
-					<BaseControl className="gs-label-row" help={__("Use this option if your animation is part of Page Navigation block", 'greenshiftgsap')}>
-						<ToggleControl
-							label={__("Is Page Nav Block?", 'greenshiftgsap')}
-							checked={scrollernav}
-							onChange={(value) => setAttributes({ scrollernav: value })}
-						/>
-					</BaseControl>
-				</>
-			)}
+			<>
+				<span className="gspb_inspector_property-title">
+					{__("Trigger actions", 'greenshiftgsap')}
+				</span>
+				<TextControl
+					value={triggeraction}
+					onChange={(value) =>
+						setAttributes({ triggeraction: value })
+					}
+					help={__("Determines how the linked animation is controlled at the 4 distinct toggle places - onEnter, onLeave, onEnterBack, and onLeaveBack. Possible values: play, pause, resume, reset, restart, complete, reverse, and none. Default is: play pause resume reset", 'greenshiftgsap')}
+				/>
+			</>
+			<BaseControl className="gs-label-row" help={__("Formula: 1 / (number of section - 1). Snap are working only on frontend part of site", 'greenshiftgsap')}>
+				<NumberControl
+					onChange={(value) => setAttributes({ triggersnap: parseFloat(value) })}
+					label={__('Scroll snap', 'greenshiftgsap')}
+					isDragEnabled
+					isShiftStepEnabled
+					shiftStep={0.1}
+					min={0}
+					max={1}
+					step={0.01}
+					value={triggersnap}
+				/>
+			</BaseControl>
+			<BaseControl className="gs-label-row" help={__("Use this option if your animation is part of Horizontal Section Scroll block", 'greenshiftgsap')}>
+				<ToggleControl
+					label={__("Horizontal scroll?", 'greenshiftgsap')}
+					checked={scrollcontainer}
+					onChange={(value) => setAttributes({ scrollcontainer: value })}
+				/>
+			</BaseControl>
+			<BaseControl className="gs-label-row" help={__("Use this option if your animation is part of Page Navigation block", 'greenshiftgsap')}>
+				<ToggleControl
+					label={__("Is Page Nav Block?", 'greenshiftgsap')}
+					checked={scrollernav}
+					onChange={(value) => setAttributes({ scrollernav: value })}
+				/>
+			</BaseControl>
 		</div>
 	);
 
 	return (
 		<div className="gs-inspector-form-inspector">
-			{animation_type != "batch" && animation_type != '3d_model' && (
+			
 				<>
 					<span className="gspb_inspector_property-title">
 						{__("Trigger type", 'greenshiftgsap')}
 					</span>
-					<SelectControl
-						value={triggertype}
-						options={[
-							{ label: __("Scroll trigger", 'greenshiftgsap'), value: "scroll" },
-							{ label: __("On load", 'greenshiftgsap'), value: "load" },
-							{ label: __("Batch Scroll", 'greenshiftgsap'), value: "batch" },
-							{ label: __("On Hover", 'greenshiftgsap'), value: "hover" },
-							{ label: __("On Click", 'greenshiftgsap'), value: "click" },
-						]}
-						onChange={(value) => setAttributes({ triggertype: value })}
-						help={<TriggerDocLink />}
-					/>
-				</>
-			)}
-			{animation_type == '3d_model' && (
-				<>
-					<span className="gspb_inspector_property-title">
-						{__("Trigger type", 'greenshiftgsap')}
-					</span>
-					<SelectControl
+					<StylesforBlock
 						value={triggertype}
 						options={[
 							{ label: __("Scroll trigger", 'greenshiftgsap'), value: "scroll" },
@@ -139,10 +116,8 @@ const TriggerForm = (props) => {
 							{ label: __("On Click", 'greenshiftgsap'), value: "click" },
 						]}
 						onChange={(value) => setAttributes({ triggertype: value })}
-						help={<TriggerDocLink />}
 					/>
 				</>
-			)}
 			{triggertype == 'observe' &&
 				<>
 					<span className="gspb_inspector_property-title">
@@ -153,16 +128,21 @@ const TriggerForm = (props) => {
 						help={__('Touch, scroll and drag types are working only on frontend part of site. Observer works on block itself, you can set custom trigger. If you want to observe whole window, use word - window, as custom trigger ', 'greenshiftgsap')}
 						options={[
 							{ label: __("Select", 'greenshiftgsap'), value: null },
-							{ label: __("Down", 'greenshiftgsap'), value: "down" },
-							{ label: __("Up", 'greenshiftgsap'), value: "up" },
-							{ label: __("Down and reverse on Up", 'greenshiftgsap'), value: "downtoggle" },
-							{ label: __("Up and reverse on Down", 'greenshiftgsap'), value: "uptoggle" },
-							{ label: __("Left", 'greenshiftgsap'), value: "left" },
-							{ label: __("Right", 'greenshiftgsap'), value: "right" },
-							{ label: __("Left and reverse on Right", 'greenshiftgsap'), value: "lefttoggle" },
-							{ label: __("Right and reverse on Left", 'greenshiftgsap'), value: "righttoggle" },
+							{ label: __("Scroll Down", 'greenshiftgsap'), value: "down" },
+							{ label: __("Scroll Up", 'greenshiftgsap'), value: "up" },
+							{ label: __("Scroll Down and reverse on Up", 'greenshiftgsap'), value: "downtoggle" },
+							{ label: __("Scroll Up and reverse on Down", 'greenshiftgsap'), value: "uptoggle" },
+							{ label: __("Scroll Left", 'greenshiftgsap'), value: "left" },
+							{ label: __("Scroll Right", 'greenshiftgsap'), value: "right" },
+							{ label: __("Scroll Left and reverse on Right", 'greenshiftgsap'), value: "lefttoggle" },
+							{ label: __("Scroll Right and reverse on Left", 'greenshiftgsap'), value: "righttoggle" },
 							{ label: __("Drag", 'greenshiftgsap'), value: "drag" },
 							{ label: __("Drag and reverse on release", 'greenshiftgsap'), value: "dragtoggle" },
+							{ label: __("Click", 'greenshiftgsap'), value: "click" },
+							{ label: __("Press", 'greenshiftgsap'), value: "press" },
+							{ label: __("Press and reverse on release", 'greenshiftgsap'), value: "presstoggle" },
+							{ label: __("Hover", 'greenshiftgsap'), value: "hover" },
+							{ label: __("Hover and reverse on release", 'greenshiftgsap'), value: "hovertoggle" },
 							{ label: __("On Change with Speed synchronized", 'greenshiftgsap'), value: "onchange" },
 						]}
 						onChange={(value) => setAttributes({ observetype: value })}
@@ -235,61 +215,7 @@ const TriggerForm = (props) => {
 					</BaseControl>
 				</>
 			}
-			{triggertype == 'mousefollow' &&
-				<>
-					<span className="gspb_inspector_property-title">
-						{__("Everything which you put inside this block will be used as Mouse pointer. By default, this will work on whole window but you can set custom trigger (this will make custom cursor only over this trigger) and custom object class (which will be used as pointer). Animations which you set in general options will be used when user clicks over trigger and will be reversed when user release pointer.", 'greenshiftgsap')}
-					</span>
-					<BaseControl className="gs-label-row">
-						<NumberControl
-							onChange={(value) => setAttributes({ durationfollow: parseFloat(value) })}
-							label={__('Follow speed', 'greenshiftgsap')}
-							isDragEnabled
-							isShiftStepEnabled
-							shiftStep={1}
-							min={0.1}
-							max={1}
-							step={0.01}
-							value={durationfollow}
-						/>
-					</BaseControl>
-				</>
-			}
-			{triggertype !== "load" && (
-				<>
-					{triggertype === "batch" ? (
-						<span className="gspb_inspector_property-title">
-							{__("Custom class for Batch scroll", 'greenshiftgsap')}
-						</span>
-					) : (
-						<span className="gspb_inspector_property-title">
-							{__("Selector for custom trigger", 'greenshiftgsap')}
-						</span>
-					)
-					}
-					<TextControl
-						value={customtrigger}
-						onChange={(value) => setAttributes({ customtrigger: value })}
-						help={__(
-							"By default, trigger will be block itself, but you can set custom trigger. Use .class or #id of element to search globally OR div.class, img, button to search selector inside current container.", 'greenshiftgsap'
-						)}
-					/>
-				</>
-			)}
-			{triggertype !== "batch" && (
-				<>
-					<span className="gspb_inspector_property-title">
-						{__("Object where to add animation", 'greenshiftgsap')}
-					</span>
-					<TextControl
-						value={customobject}
-						onChange={(value) => setAttributes({ customobject: value })}
-						help={__(
-							"By default, will be applied to current object but you can apply to custom object. Use .class or #id of element to search globally OR div.class, img, button to search selector inside current container", 'greenshiftgsap'
-						)}
-					/>
-				</>
-			)}
+			
 			{(triggertype === "scroll" || triggertype === "batch") && (
 				<>
 					<>
@@ -299,9 +225,7 @@ const TriggerForm = (props) => {
 						<TextControl
 							value={triggerstart}
 							onChange={(value) => setAttributes({ triggerstart: value })}
-							help={__(
-								"By default, trigger is set to top point of element, but you can change this. Example: top center", 'greenshiftgsap'
-							)}
+							help={<TriggerDocLink />}
 						/>
 					</>
 					<>
@@ -339,6 +263,68 @@ const TriggerForm = (props) => {
 							</>
 						</>
 					)}
+				</>
+			)}
+			{triggertype !== "load" && (
+				<>
+
+					<div className="gspb-selector-input-with-text">
+						<TextControl
+							value={customtrigger}
+							onChange={(value) => setAttributes({ customtrigger: value })}
+							label={triggertype == 'batch' ? __("Custom class for Batch scroll", 'greenshiftgsap') : __("Selector for custom trigger", 'greenshiftgsap')}
+						/>
+						<div className="gspb-selector-popup-in-textfield">
+							<RuleBuilder
+								enableJS={false}
+								enableTriggerIndex={false}
+								hoverClasses={false}
+								currentLayer={false}
+								applyStyle={(value) => { setAttributes({ customtrigger: value }); }}
+
+							>
+								<i className="rhicon rhi-cog"></i>
+							</RuleBuilder>
+						</div>
+					</div>
+					<BaseControl
+						help={__(
+							"By default, trigger will be block itself, but you can set custom trigger. Use .class or #id of element to search globally OR div.class, img, button to search selector inside current container.", 'greenshiftgsap'
+						)}
+					/>
+				</>
+			)}
+			{triggertype !== "batch" && (
+				<>
+					<div className="gspb-selector-input-with-text">
+						<TextControl
+							label={__("Object where to add animation", 'greenshiftgsap')}
+							value={customobject}
+							onChange={(value) => setAttributes({ customobject: value })}
+
+						/>
+						<div className="gspb-selector-popup-in-textfield">
+							<RuleBuilder
+								enableJS={false}
+								enableTriggerIndex={false}
+								hoverClasses={false}
+								currentLayer={false}
+								applyStyle={(value) => { setAttributes({ customobject: value }); }}
+
+							>
+								<i className="rhicon rhi-cog"></i>
+							</RuleBuilder>
+						</div>
+					</div>
+					<BaseControl
+						help={__(
+							"By default, will be applied to current object but you can apply to custom object. Use .class or #id of element to search globally OR div.class, img, button to search selector inside current container", 'greenshiftgsap'
+						)}
+					/>
+				</>
+			)}
+			{(triggertype === "scroll" || triggertype === "batch") && (
+				<>
 					<div
 						className="gspb_row gspb_row--no-padding-col"
 						style={{ marginTop: '10px', width: '100%' }}
