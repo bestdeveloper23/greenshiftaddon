@@ -33,13 +33,24 @@ function GSmodelinit(app, current, zoomtf = false, init = false, context = {}) {
                 });
             }
 
-            const splinezoom = JSON.parse(gs_get_dataset(current, 'splinezoom'));
-            const zoom = JSON.parse(gs_get_dataset(current, 'zoomIn'));
             if(init){
-                app.setZoom(zoom);
+                const zoom = JSON.parse(gs_get_dataset(current, 'zoomIn'));
+                const zoomM = JSON.parse(gs_get_dataset(current, 'zoomInM'));
+                let isMobile = (typeof context.conditions != 'undefined') ? context.conditions.isMobile : false;
+                let useMobile = (gs_get_dataset(current, 'useMobile') == 'yes') ? true : false;
+
+                if (isMobile && useMobile) {
+                    app.setZoom(zoomM);
+                } else {
+                    app.setZoom(zoom);
+                }
+
             } else if(zoomtf){
+                const splinezoom = JSON.parse(gs_get_dataset(current, 'splinezoom'));
                 app.setZoom(splinezoom);
             }
+            
+            
             app._scene.traverse((child) => {
                 if (child.type !== 'HemisphereLight') {
 

@@ -1,5 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { MediaUpload, MediaUploadCheck } from "@wordpress/block-editor";
+import { useState } from "@wordpress/element";
 import {
   PanelBody,
   TextControl,
@@ -114,10 +115,14 @@ const CommonForm = (props) => {
       splineApp,
       splinezoom,
       zoomIn,
+      zoomInM,
       zoomTF,
     },
     setAttributes,
   } = props;
+
+  const [zoomRatio, setZoomRatio] = useState(1);
+  const [zoomState, setZoomState] = useState(true);
 
   function animationReset() {
     setAttributes({
@@ -173,62 +178,7 @@ const CommonForm = (props) => {
           />
         </div>
       </div>
-      <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <UnitControl
-              units={[
-                { value: "px", label: "px" },
-                { value: "%", label: "%" },
-                { value: "em", label: "em" },
-                { value: "rem", label: "rem" },
-                { value: "vw", label: "vw" },
-                { value: "vh", label: "vh" },
-                { value: "ch", label: "ch" },
-              ]}
-              onChange={(value) => setAttributes({ xM: value })}
-              label={__("Shift X", "greenshiftgsap")}
-              value={xM}
-            />
-          </BaseControl>
-        </div>
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <UnitControl
-              units={[
-                { value: "px", label: "px" },
-                { value: "%", label: "%" },
-                { value: "em", label: "em" },
-                { value: "rem", label: "rem" },
-                { value: "vw", label: "vw" },
-                { value: "vh", label: "vh" },
-                { value: "ch", label: "ch" },
-              ]}
-              onChange={(value) => setAttributes({ yM: value })}
-              label={__("Y")}
-              value={yM}
-            />
-          </BaseControl>
-        </div>
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <UnitControl
-              units={[
-                { value: "px", label: "px" },
-                { value: "%", label: "%" },
-                { value: "em", label: "em" },
-                { value: "rem", label: "rem" },
-                { value: "vw", label: "vw" },
-                { value: "vh", label: "vh" },
-                { value: "ch", label: "ch" },
-              ]}
-              onChange={(value) => setAttributes({ zM: value })}
-              label={__("Z")}
-              value={zM}
-            />
-          </BaseControl>
-        </div>
-      </div>
+     
       <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
         <div class="gspb_row__col--4">
           <BaseControl>
@@ -272,52 +222,59 @@ const CommonForm = (props) => {
         </div>
       </div>
       <div className="gspb_inspector_inputs-row__title gspb_row gspb_row--gutter-20">
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <NumberControl
-              onChange={(value) => setAttributes({ sxM: parseFloat(value) })}
-              label={__("Scale X", "greenshiftgsap")}
-              isDragEnabled
-              isShiftStepEnabled
-              shiftStep={1}
-              min={0}
-              max={30}
-              step={0.1}
-              value={sxM}
-            />
-          </BaseControl>
+          <div className="gspb_row__col--6" style={{ padding: 0 }}>
+            <span className="gspb_inspector_property-title">
+            {__("Zoom", "greenshiftgsap")}
+            </span>
+          </div>
+          <div className="gspb_row__col--6" style={{ padding: 0 }}>
+            <BaseControl>
+              <button
+                className="components-button components-icon-button components-toolbar__control"
+                onClick={() => {
+                  let zoom = zoomInM*1.1;
+                  if(zoomState){
+                    setAttributes({splinezoom: 1.1/zoomRatio, zoomInM: zoom, zoomTF: true});
+                    setZoomState(false);
+                  } else {
+                    setAttributes({splinezoom: 1.1, zoomInM: zoom, zoomTF: true})
+                  }
+                  setZoomRatio(zoomRatio/1.1);
+                }}
+              >
+                <i
+                  class="rhicon rhi-plus"
+                  style={{
+                    margin: "auto",
+                    fontSize: "20px",
+                  }}
+                />
+              </button>
+              <button
+                className="components-button components-icon-button components-toolbar__control"
+                onClick={() => {
+                  let zoom = zoomInM*0.9;
+                  if(zoomState){
+                    setAttributes({splinezoom: 0.9/zoomRatio, zoomInM: zoom, zoomTF: true});
+                    setZoomState(false);
+                  } else {
+                    setAttributes({splinezoom: 0.9, zoomInM: zoom, zoomTF: true});
+                  }
+                  setZoomRatio(zoomRatio/0.9);
+                }}
+              >
+                <i
+                  class="rhicon rhi-minus"
+                  style={{
+                    margin: "auto",
+                    fontSize: "20px",
+                  }}
+                />
+              </button>
+            </BaseControl>
+          </div>
         </div>
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <NumberControl
-              onChange={(value) => setAttributes({ syM: parseFloat(value) })}
-              label={__("Y")}
-              isDragEnabled
-              isShiftStepEnabled
-              shiftStep={1}
-              min={0}
-              max={30}
-              step={0.1}
-              value={syM}
-            />
-          </BaseControl>
-        </div>
-        <div class="gspb_row__col--4">
-          <BaseControl>
-            <NumberControl
-              onChange={(value) => setAttributes({ szM: parseFloat(value) })}
-              label={__("Z")}
-              isDragEnabled
-              isShiftStepEnabled
-              shiftStep={1}
-              min={0}
-              max={30}
-              step={0.1}
-              value={szM}
-            />
-          </BaseControl>
-        </div>
-      </div>
+      
       <hr style={{ margin: "1em 0" }} />
       {customPropsM &&
         customPropsM.map((item, index) => {
@@ -387,26 +344,6 @@ const CommonForm = (props) => {
           }}
         />
       </div>
-      <div style={{ marginTop: 10 }}></div>
-      <hr style={{ marginBottom: 15, marginTop: 15 }} />
-      <>
-        <span className="gspb_inspector_property-title">
-          {__("Trigger start", "greenshiftgsap")}
-        </span>
-        <TextControl
-          value={triggerstartM}
-          onChange={(value) => setAttributes({ triggerstartM: value })}
-        />
-      </>
-      <>
-        <span className="gspb_inspector_property-title">
-          {__("Trigger end")}
-        </span>
-        <TextControl
-          value={triggerendM}
-          onChange={(value) => setAttributes({ triggerendM: value })}
-        />
-      </>
       <div style={{ marginTop: 10 }}>
         {__(
           "Mobile options currently work only on frontend side",
@@ -625,7 +562,17 @@ const CommonForm = (props) => {
               /> */}
               <button
                 className="components-button components-icon-button components-toolbar__control"
-                onClick={() => {let zoom = zoomIn*1.1; setAttributes({splinezoom: 1.1, zoomIn: zoom, zoomTF: true})}}
+                onClick={() => {
+                  let zoom = zoomIn*1.1;
+                  if(zoomState){
+                    setAttributes({splinezoom: 1.1, zoomIn: zoom, zoomTF: true})
+                    setZoomRatio(zoomRatio*1.1);
+                  } else {
+                    setAttributes({splinezoom: 1.1*zoomRatio, zoomIn: zoom, zoomTF: true});
+                    setZoomRatio(1.1);
+                    setZoomState(true);
+                  }
+                }}
               >
                 <i
                   class="rhicon rhi-plus"
@@ -637,7 +584,17 @@ const CommonForm = (props) => {
               </button>
               <button
                 className="components-button components-icon-button components-toolbar__control"
-                onClick={() => {let zoom = zoomIn*0.9; setAttributes({splinezoom: 0.9, zoomIn: zoom, zoomTF: true})}}
+                onClick={() => {
+                  let zoom = zoomIn*0.9;
+                  if(zoomState){
+                    setAttributes({splinezoom: 0.9, zoomIn: zoom, zoomTF: true});
+                    setZoomRatio(zoomRatio*0.9);
+                  } else {
+                    setAttributes({splinezoom: 0.9*zoomRatio, zoomIn: zoom, zoomTF: true});
+                    setZoomRatio(0.9);
+                    setZoomState(true);
+                  }
+                }}
               >
                 <i
                   class="rhicon rhi-minus"

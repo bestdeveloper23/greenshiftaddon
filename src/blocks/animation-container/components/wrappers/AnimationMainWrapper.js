@@ -121,6 +121,7 @@ const AnimationMainWrapper = (props) => {
             variables,
             splinezoom,
             zoomIn,
+            zoomInM,
             zoomTF,
         },
         children,
@@ -246,6 +247,7 @@ const AnimationMainWrapper = (props) => {
             url = {model_url ? model_url : null}
             data-splinezoom={splinezoom ? splinezoom : 1}
             data-zoomIn={zoomIn ? zoomIn : 1}
+            data-zoomInM={zoomInM ? zoomInM : 1}
             data-zoomTF={zoomTF ? zoomTF : false}
         >
             {children}

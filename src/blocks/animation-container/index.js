@@ -181,6 +181,7 @@ registerBlockType("greenshift-blocks/animation-container2", {
         splineApp,
         splinezoom,
         zoomIn,
+        zoomInM,
         zoomTF
       },
       setAttributes,
@@ -1138,7 +1139,8 @@ registerBlockType("greenshift-blocks/animation-container2", {
       selected_object,
       variables,
       splinezoom,
-      zoomIn
+      zoomIn,
+      zoomInM,
     ]);
     useEffect(() => {
       (() => {

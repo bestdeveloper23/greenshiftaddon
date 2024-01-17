@@ -632,6 +632,10 @@ export default {
         type: 'number',
         default: 1,
     },
+    zoomInM: {
+        type: 'number',
+        default: 1,
+    },
     zoomTF: {
         type: 'boolean',
         default: false,
