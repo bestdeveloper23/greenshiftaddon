@@ -747,7 +747,6 @@ const CommonForm = (props) => {
                         : [];
                       argscustomProps[index].name = value;
                       setAttributes({ customProps: argscustomProps });
-                      console.log(customProps);
                     }}
                     placeholder={__(
                       "Property name",

@@ -25,7 +25,7 @@ const { ExtraToolBar } = gspblib.editor;
 const { BlockToolBar } = gspblib.components;
 
 // Register Block
-registerBlockType("greenshift-blocks/animation-container2", {
+registerBlockType("greenshift-blocks/animation-container-3d", {
   title: __("3D Animation Container"),
   description: __("Adds 3D Animation Wrapper to your blocks"),
   category: "Greenshiftpro",
@@ -967,8 +967,7 @@ registerBlockType("greenshift-blocks/animation-container2", {
 
               // const app = new splineAppRef.current(gsapquick.children[0]);
               const zooming = JSON.parse(gs_get_dataset(gsapquick, 'zoomTF'));
-              console.log(zooming);
-              GSmodelinit(canvasRef.current, gsapquick, zooming);
+              GSmodelinit(canvasRef.current, gsapquick, id, zooming);
               setAttributes({zoomTF: false});
             }
             // const revealtransform = AnimationRef.current.querySelector(".gs-reveal-wrap");
@@ -1013,7 +1012,6 @@ registerBlockType("greenshift-blocks/animation-container2", {
         isInitialMount.current = false;
         if (AnimationRef.current) {
           const gsapquick = AnimationRef.current.querySelector(".gs-gsap-wrap-3d");
-          console.log(gsapquick);
           let ownerDocument = AnimationRef.current.ownerDocument;
           if (gsapquick.children.length) {
             gsapquick.children[0].remove();
@@ -1028,8 +1026,8 @@ registerBlockType("greenshift-blocks/animation-container2", {
         
           if(splineAppRef.current){
             const app = new splineAppRef.current(gsapquick.children[0]);
-            console.log(zoomTF);
-            GSmodelinit(app, gsapquick, zoomTF);
+            const zooming = JSON.parse(gs_get_dataset(gsapquick, 'zoomTF'));
+            GSmodelinit(app, gsapquick, id, zooming);
             setAttributes({zoomTF: false});
           }
         
@@ -1171,7 +1169,6 @@ registerBlockType("greenshift-blocks/animation-container2", {
                 const marker = `gsap_id-${id}`;
                 window[marker] = app;
                 const variablesObject = app.getVariables();
-                console.log(variablesObject);
                 const variablesArray = [];
                 if (
                   variablesObject !== "undefined" &&
@@ -1204,7 +1201,7 @@ registerBlockType("greenshift-blocks/animation-container2", {
                       for (let i = 0; i < gs_wrappers.length; i++) {
                         let current = gs_wrappers[i];
                         // GSinit(current, false, false, "", "", context);
-                        GSmodelinit(app, current, true, context);
+                        GSmodelinit(app, current, id, false, true, context);
                       }
 
                       if (gsapscrolledfind) {
